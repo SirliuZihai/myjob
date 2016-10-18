@@ -32,14 +32,14 @@ public class FreemarkUtil {
     }
 
     /**
-     * ¿ØÖÆÌ¨Êä³ö
+     * æ§åˆ¶å°è¾“å‡º
      * 
      * @param name
      * @param root
      */
     public void print(String name, Map<String, Object> root) {
         try {
-            // Í¨¹ıTemplate¿ÉÒÔ½«Ä£°åÎÄ¼şÊä³öµ½ÏàÓ¦µÄÁ÷
+            // é€šè¿‡Templateå¯ä»¥å°†æ¨¡æ¿æ–‡ä»¶è¾“å‡ºåˆ°ç›¸åº”çš„æµ
             Template temp = this.getTemplate(name);
             temp.process(root, new PrintWriter(System.out));
         } catch (TemplateException e) {
@@ -50,7 +50,7 @@ public class FreemarkUtil {
     }
 
     /**
-     * Êä³öHTMLÎÄ¼ş
+     * è¾“å‡ºHTMLæ–‡ä»¶
      * 
      * @param name
      * @param root
@@ -59,7 +59,7 @@ public class FreemarkUtil {
     public void fprint(String name, Map<String, Object> root, String outFile) {
         FileWriter out = null;
         try {
-            // Í¨¹ıÒ»¸öÎÄ¼şÊä³öÁ÷£¬¾Í¿ÉÒÔĞ´µ½ÏàÓ¦µÄÎÄ¼şÖĞ£¬´Ë´¦ÓÃµÄÊÇ¾ø¶ÔÂ·¾¶
+            // é€šè¿‡ä¸€ä¸ªæ–‡ä»¶è¾“å‡ºæµï¼Œå°±å¯ä»¥å†™åˆ°ç›¸åº”çš„æ–‡ä»¶ä¸­ï¼Œæ­¤å¤„ç”¨çš„æ˜¯ç»å¯¹è·¯å¾„
             out = new FileWriter(new File("E:/workspace/freemarkprj/page/" + outFile));
             Template temp = this.getTemplate(name);
             temp.process(root, out);
@@ -77,7 +77,7 @@ public class FreemarkUtil {
         }
     }
     
-    //²âÊÔ 
+    //æµ‹è¯• 
     public static void main(String[] args){
     	FreemarkUtil util = new FreemarkUtil();
     	Map<String,Object> resultMap=  new HashMap<String, Object>();

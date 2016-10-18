@@ -32,42 +32,42 @@ public class QuartzTestController {
 	}
 	@RequestMapping("/add")
 	public void add(String jobname,String group,String className,String triggerName){
-		log.info("��ȡ���ݣ�������������"+jobname+group+className+triggerName);
+		log.info("锟斤拷取锟斤拷锟捷ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷"+jobname+group+className+triggerName);
 		try {
 			Scheduler scheduler = bean.getScheduler();
 			Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(className);
 			JobDetail job = newJob(jobClass).withIdentity(jobname, group).storeDurably(true).build();
 			CronTrigger trigger = newTrigger().withIdentity(triggerName, group).withSchedule(cronSchedule("2 0/2 * * * ?")).build();
 			scheduler.scheduleJob(job,trigger);
-			  // ����  
+			  // 锟斤拷锟斤拷  
 			if (!scheduler.isShutdown()) {  
 				scheduler.start();  
 			}
 			
 		} catch (ClassNotFoundException e) {
-			log.error("û���ҵ�������");
+			log.error("没锟斤拷锟揭碉拷锟斤拷锟斤拷锟斤拷");
 			e.printStackTrace();
 		} catch (SchedulerException e) {
-			log.error("���ʧ��");
+			log.error("锟斤拷锟绞э拷锟�");
 		} 
-		log.info("��ӳɹ�");
+		log.info("锟斤拷映晒锟�");
 	}
 	@RequestMapping("/delete")
 	public void delete(String jobname,String group,String triggerName){
-		log.info("��ȡ���ݣ�������������"+jobname+group+triggerName);
+		log.info("锟斤拷取锟斤拷锟捷ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷"+jobname+group+triggerName);
 		try {
 			Scheduler scheduler = bean.getScheduler();
-			scheduler.pauseTrigger(TriggerKey.triggerKey(triggerName, group));// ֹͣ������  
-			scheduler.unscheduleJob(TriggerKey.triggerKey(triggerName, group));// �Ƴ�������  
-			scheduler.deleteJob(JobKey.jobKey(jobname, group));// ɾ������ 
-			  // ����  
+			scheduler.pauseTrigger(TriggerKey.triggerKey(triggerName, group));// 停止锟斤拷锟斤拷锟斤拷  
+			scheduler.unscheduleJob(TriggerKey.triggerKey(triggerName, group));// 锟狡筹拷锟斤拷锟斤拷锟斤拷  
+			scheduler.deleteJob(JobKey.jobKey(jobname, group));// 删锟斤拷锟斤拷锟斤拷 
+			  // 锟斤拷锟斤拷  
 			if (!scheduler.isShutdown()) {  
 				scheduler.start();  
 			}
 		} catch (SchedulerException e) {
-			log.error("��ͣʧ��");
+			log.error("锟斤拷停失锟斤拷");
 		}
-		log.info("ɾ���ɹ�");
+		log.info("删锟斤拷锟缴癸拷");
 	}
 }
 */

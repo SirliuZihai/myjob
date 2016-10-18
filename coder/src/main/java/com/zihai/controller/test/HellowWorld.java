@@ -2,8 +2,6 @@ package com.zihai.controller.test;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +18,10 @@ public class HellowWorld  {
 	@RequestMapping("/world")
 	public String hellow(String name,Model model){
 		print.print(name);
-		model.addAttribute("username", "gook luck 先生"+name);
+		model.addAttribute("username", "gook luck 鍏堢敓"+name);
 		return "test/hellow";
 	}
 	/**
-	 * 将数据传回客户端
-	 * 异步的方式
 	 * @param relationId
 	 * @param userCode
 	 * @param message
