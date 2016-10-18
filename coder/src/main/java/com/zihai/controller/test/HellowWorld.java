@@ -17,8 +17,9 @@ public class HellowWorld  {
 	
 	@RequestMapping("/world")
 	public String hellow(String name,Model model){
+		System.out.println("the name:"+name);
 		print.print(name);
-		model.addAttribute("username", "gook luck 先生"+name);
+		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";
 	}
 	/**
