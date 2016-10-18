@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zihai.test.dao.UserDao">
+	<!-- <resultMap id="BaseResultMap" type="com.hr.ehr.entity.Authority">
+		<id column="authority_id" property="authorityId"/>
+		<result column="authority_module_no" property="authorityModuleNo" />
+		<result column="authority_condition_no" property="authorityConditionNo"/>
+		<result column="authority_action_no" property="authorityActionNo"/>
+		<result column="authority_desc" property="authorityDesc"/>
+	</resultMap> -->
+	<!-- <select id="query" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_authority
+		where 1=1 and 
+		<foreach collection="authIdList" item="authorityId" open="(" close=")" separator="OR">  
+   			authority_id = #{authorityId}  
+  		</foreach> 
+	</select> -->
+	<select id="getPassword" resultType="java.lang.String" parameterType="java.lang.String">
+		select password from zih_user where username = #{username,jdbcType=VARCHAR}
+	</select>
+</mapper>

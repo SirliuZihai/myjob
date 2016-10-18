@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zihai.dao.AccountMapper">
+  <resultMap id="BaseResultMap" type="com.zihai.entity.Account">
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="credit" jdbcType="CHAR" property="credit" />
+    <result column="modifydate" jdbcType="TIMESTAMP" property="modifydate" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zihai.entity.Account">
+    insert into zih_account (username, money, credit, 
+      modifydate)
+    values (#{username,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{credit,jdbcType=CHAR}, 
+      #{modifydate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zihai.entity.Account">
+    insert into zih_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="credit != null">
+        credit,
+      </if>
+      <if test="modifydate != null">
+        modifydate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="credit != null">
+        #{credit,jdbcType=CHAR},
+      </if>
+      <if test="modifydate != null">
+        #{modifydate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

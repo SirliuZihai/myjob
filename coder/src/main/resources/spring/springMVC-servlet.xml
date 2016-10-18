@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<context:component-scan base-package="com.zihai.controller">
+ 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+<!-- 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" /> -->
+ 	</context:component-scan>
+ 	 
+
+	<!-- HandlerMapping -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	
+	<!-- HandlerAdapter-->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter "/>
+	
+	<!-- ViewResolver -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/page/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+ 
+	<!-- FreeMarker视图解析   如返回student。。在这里配置后缀名ftl和视图解析器。。-->
+	 <bean  class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		  <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"></property>
+		  <property name="suffix" value=".ftl" />
+		  <property name="prefix" value="/page/"/>
+		  <property name="contentType" value="text/html; charset=UTF-8"/>
+		  <property name="cache" value="false" />
+          <property name="requestContextAttribute" value="request" />
+          <property name="exposeSpringMacroHelpers" value="true" />
+          <property name="exposeRequestAttributes" value="true" />
+          <!-- <property name="allowSessionOverride" value="true"/> -->
+          <property name="exposeSessionAttributes" value="true" />
+          <property name="order" value="0"/>
+	 </bean>
+	<!-- freemarker的配置 -->
+	 <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		  <property name="templateLoaderPath" value="/" />
+		  <property name="freemarkerSettings">
+		   <props>
+		   		<prop key="output_encoding" >utf-8</prop>
+			    <prop key="template_update_delay">10</prop>
+			    <prop key="locale">zh_CN</prop>
+			    <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+			    <prop key="date_format">yyyy-MM-dd</prop>
+			    <prop key="number_format">##########0.000</prop>
+		   </props>
+		  </property>
+	 </bean>
+</beans>
