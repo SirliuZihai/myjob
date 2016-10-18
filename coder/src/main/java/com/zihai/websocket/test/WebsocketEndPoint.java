@@ -14,18 +14,18 @@ import org.apache.commons.logging.LogFactory;
 import com.zihai.websocket.util.SessionUtils;
 
 /**
- * ¹¦ÄÜËµÃ÷£ºwebsocket´¦ÀíÀà, Ê¹ÓÃJ2EE7µÄ±ê×¼
- * ÇĞ¼ÉÖ±½ÓÔÚ¸ÃÁ¬½Ó´¦ÀíÀàÖĞ¼ÓÈëÒµÎñ´¦Àí´úÂë
- * ×÷Õß£ºliuxing(2014-11-14 04:20)
+ * åŠŸèƒ½è¯´æ˜ï¼šwebsocketå¤„ç†ç±», ä½¿ç”¨J2EE7çš„æ ‡å‡†
+ * åˆ‡å¿Œç›´æ¥åœ¨è¯¥è¿æ¥å¤„ç†ç±»ä¸­åŠ å…¥ä¸šåŠ¡å¤„ç†ä»£ç 
+ * ä½œè€…ï¼šliuxing(2014-11-14 04:20)
 */
-//relationIdºÍuserCodeÊÇÎÒµÄÒµÎñ±êÊ¶²ÎÊı,websocket.wsÊÇÁ¬½ÓµÄÂ·¾¶£¬¿ÉÒÔ×ÔĞĞ¶¨Òå
+//relationIdå’ŒuserCodeæ˜¯æˆ‘çš„ä¸šåŠ¡æ ‡è¯†å‚æ•°,websocket.wsæ˜¯è¿æ¥çš„è·¯å¾„ï¼Œå¯ä»¥è‡ªè¡Œå®šä¹‰
 @ServerEndpoint("/websocket/{relationId}/{userCode}")
 public class WebsocketEndPoint {
 
  private static Log log = LogFactory.getLog(WebsocketEndPoint.class);
 
 /**
- * ´ò¿ªÁ¬½ÓÊ±´¥·¢
+ * æ‰“å¼€è¿æ¥æ—¶è§¦å‘
  * @param relationId
  * @param userCode
  * @param session
@@ -38,7 +38,7 @@ public class WebsocketEndPoint {
 }
 
 /**
- * ÊÕµ½¿Í»§¶ËÏûÏ¢Ê±´¥·¢
+ * æ”¶åˆ°å®¢æˆ·ç«¯æ¶ˆæ¯æ—¶è§¦å‘
  * @param relationId
  * @param userCode
  * @param message
@@ -51,7 +51,7 @@ public class WebsocketEndPoint {
 }
 
 /**
- * Òì³£Ê±´¥·¢
+ * å¼‚å¸¸æ—¶è§¦å‘
  * @param relationId
  * @param userCode
  * @param session
@@ -63,7 +63,7 @@ public class WebsocketEndPoint {
 }
 
 /**
- * ¹Ø±ÕÁ¬½ÓÊ±´¥·¢
+ * å…³é—­è¿æ¥æ—¶è§¦å‘
  * @param relationId
  * @param userCode
  * @param session

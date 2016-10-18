@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * ¹¦ÄÜËµÃ÷£ºÓÃÀ´´æ´¢ÒµÎñ¶¨ÒåµÄsessionIdºÍÁ¬½ÓµÄ¶ÔÓ¦¹ØÏµ
- * ÀûÓÃÒµÎñÂß¼­ÖĞ×é×°µÄsessionId»ñÈ¡ÓĞĞ§Á¬½Óºó½øĞĞºóĞø²Ù×÷
- * ×÷Õß£ºliuxing(2014-12-26 02:32)
+ * åŠŸèƒ½è¯´æ˜ï¼šç”¨æ¥å­˜å‚¨ä¸šåŠ¡å®šä¹‰çš„sessionIdå’Œè¿æ¥çš„å¯¹åº”å…³ç³»
+ * åˆ©ç”¨ä¸šåŠ¡é€»è¾‘ä¸­ç»„è£…çš„sessionIdè·å–æœ‰æ•ˆè¿æ¥åè¿›è¡Œåç»­æ“ä½œ
+ * ä½œè€…ï¼šliuxing(2014-12-26 02:32)
 */
 public class SessionUtils {
 
@@ -26,7 +26,7 @@ public class SessionUtils {
 }
 
 /**
- * ÅĞ¶ÏÊÇ·ñÓĞÁ¬½Ó
+ * åˆ¤æ–­æ˜¯å¦æœ‰è¿æ¥
  * @param relationId
  * @param userCode
  * @return
@@ -36,7 +36,7 @@ public class SessionUtils {
 }
 
 /**
- * ×é×°Î¨Ò»Ê¶±ğµÄkey
+ * ç»„è£…å”¯ä¸€è¯†åˆ«çš„key
  * @param relationId
  * @param userCode
  * @return

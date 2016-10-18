@@ -13,7 +13,7 @@ public class PrintEvents implements PrintService {
 	private UserDao dao;
 	public void print(String name) {
 		log.info("print name is "+dao.getPassword(name));
-		log.error("∑¢…˙¡À£∫printEvents.changed");
+		log.error("printEvent.changed");
 
 	}
 
