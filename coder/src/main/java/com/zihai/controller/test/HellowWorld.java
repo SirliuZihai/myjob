@@ -1,7 +1,10 @@
 package com.zihai.controller.test;
 
+
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +15,14 @@ import com.zihai.websocket.util.SessionUtils;
 @Controller
 @RequestMapping("/hellow")
 public class HellowWorld  {
+	private Logger log = LoggerFactory.getLogger("printEvents");
+	
 	@Resource(name="printEvents")
 	private PrintService print;
 	
 	@RequestMapping("/world")
 	public String hellow(String name,Model model){
-		System.out.println("the name:"+name);
+		log.info("the name:"+name);
 		print.print(name);
 		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";

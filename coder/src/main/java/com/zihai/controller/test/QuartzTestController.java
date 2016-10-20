@@ -1,4 +1,4 @@
-/*package com.zihai.controller.test;
+package com.zihai.controller.test;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
@@ -13,7 +13,6 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class QuartzTestController {
 	private static Logger log = Logger.getLogger("SimpleJob");
 	
-	@Autowired
-	private SchedulerFactoryBean bean;
-	
+	/*@Autowired
+	private SchedulerFactoryBean bean;*/
+	private SchedulerFactoryBean bean = new SchedulerFactoryBean();
 	@RequestMapping("/show")
 	public String showManager(){
 		return "test/quartzManager";
 	}
 	@RequestMapping("/add")
 	public void add(String jobname,String group,String className,String triggerName){
-		log.info("锟斤拷取锟斤拷锟捷ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷"+jobname+group+className+triggerName);
+		log.info("收到数据"+jobname+group+className+triggerName);
 		try {
 			Scheduler scheduler = bean.getScheduler();
 			Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(className);
@@ -45,16 +44,16 @@ public class QuartzTestController {
 			}
 			
 		} catch (ClassNotFoundException e) {
-			log.error("没锟斤拷锟揭碉拷锟斤拷锟斤拷锟斤拷");
+			log.error("没找到任务类");
 			e.printStackTrace();
 		} catch (SchedulerException e) {
-			log.error("锟斤拷锟绞э拷锟�");
+			log.error("任务添加失败");
 		} 
-		log.info("锟斤拷映晒锟�");
+		log.info("任务添加成功");
 	}
 	@RequestMapping("/delete")
 	public void delete(String jobname,String group,String triggerName){
-		log.info("锟斤拷取锟斤拷锟捷ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷"+jobname+group+triggerName);
+		log.info("收到数据"+jobname+group+triggerName);
 		try {
 			Scheduler scheduler = bean.getScheduler();
 			scheduler.pauseTrigger(TriggerKey.triggerKey(triggerName, group));// 停止锟斤拷锟斤拷锟斤拷  
@@ -65,9 +64,8 @@ public class QuartzTestController {
 				scheduler.start();  
 			}
 		} catch (SchedulerException e) {
-			log.error("锟斤拷停失锟斤拷");
+			log.error("失败");
 		}
-		log.info("删锟斤拷锟缴癸拷");
+		log.info("成功");
 	}
 }
-*/

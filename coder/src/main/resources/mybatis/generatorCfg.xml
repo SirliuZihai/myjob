@@ -50,10 +50,11 @@
         </javaClientGenerator>  
           
         <!-- 配置表信息，这里没生成一张表，这里需要改变一次对应表名 -->    
-        <table schema="zihai" tableName="zih_user"  
+        <!-- 
+        <table schema="zihai" tableName="zih_user"  mapperName="UserDao"
             domainObjectName="User"  enableSelectByPrimaryKey="true" 
-         enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses"> 
-             
+         enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses" /> 
+           -->   
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample   
                 是否生成 example类   -->   
             <!--  <columnRenamingRule searchString="zih_" replaceString=""/> --> 
@@ -62,14 +63,18 @@
             <ignoreColumn column="FRED" />-->  
             <!-- 指定列的java数据类型   
             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->  
-        </table>  
-        <table schema="zihai" tableName="zih_account" 
+       <!-- 
+        <table schema="zihai" tableName="zih_userinfo" mapperName="UserInfoDao"
+            domainObjectName="UserInfo" enableSelectByPrimaryKey="true" 
+            enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses"></table>  
+        <table schema="zihai" tableName="zih_account" mapperName="AccountDao"
             domainObjectName="Account" enableSelectByPrimaryKey="true" 
             enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses"></table>  
-        <table schema="zihai" tableName="zih_translog"  
-            domainObjectName="TransLog" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true" 
-             enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses"> 
-            <!-- <generatedKey column="trans_id" sqlStatement="SELECT nextval('TestSeq')"/> -->
+        --> 
+        <table schema="zihai" tableName="zih_translog" mapperName="TransLogDao" 
+            domainObjectName="TransLog" 
+              enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses"> 
+            <generatedKey column="trans_id" sqlStatement="SELECT nextval('TestSeq')"/>
         </table>
   
     </context>  

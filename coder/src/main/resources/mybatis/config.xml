@@ -2,7 +2,9 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias alias="person" type="com.zihai.entity.Person"/><!-- -->
-        
+        <typeAlias alias="Account" type="com.zihai.entity.Account"/><!--帐户表 -->
+        <typeAlias alias="TransLog" type="com.zihai.entity.TransLog"/>
+        <typeAlias alias="User" type="com.zihai.entity.User"/>
+        <typeAlias alias="UserInfo" type="com.zihai.entity.UserInfo"/>
     </typeAliases>
 </configuration>

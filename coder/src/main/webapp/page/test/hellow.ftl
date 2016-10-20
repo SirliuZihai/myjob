@@ -4,6 +4,7 @@
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache"> 
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> 
 <META HTTP-EQUIV="Expires" CONTENT="0"> 
+<meta charset="UTF-8">
 <title>测试</title>
 </head>
 
