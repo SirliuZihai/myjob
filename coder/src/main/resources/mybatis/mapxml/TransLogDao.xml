@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zihai.dao.TransLogDao">
+  <resultMap id="BaseResultMap" type="com.zihai.entity.TransLog">
+    <id column="trans_id" jdbcType="VARCHAR" property="transId" />
+    <result column="user_from" jdbcType="VARCHAR" property="userFrom" />
+    <result column="user_to" jdbcType="VARCHAR" property="userTo" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="makedate" jdbcType="TIMESTAMP" property="makedate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    trans_id, user_from, user_to, amt, state, remark, makedate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zih_translog
+    where trans_id = #{transId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from zih_translog
+    where trans_id = #{transId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zihai.entity.TransLog">
+    <selectKey keyProperty="transId" order="BEFORE" resultType="java.lang.String">
+      SELECT nextval('TestSeq')
+    </selectKey>
+    insert into zih_translog (trans_id, user_from, user_to, 
+      amt, state, remark, 
+      makedate)
+    values (#{transId,jdbcType=VARCHAR}, #{userFrom,jdbcType=VARCHAR}, #{userTo,jdbcType=VARCHAR}, 
+      #{amt,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{makedate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zihai.entity.TransLog">
+    <selectKey keyProperty="transId" order="BEFORE" resultType="java.lang.String">
+      SELECT nextval('TestSeq')
+    </selectKey>
+    insert into zih_translog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      trans_id,
+      <if test="userFrom != null">
+        user_from,
+      </if>
+      <if test="userTo != null">
+        user_to,
+      </if>
+      <if test="amt != null">
+        amt,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="makedate != null">
+        makedate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{transId,jdbcType=VARCHAR},
+      <if test="userFrom != null">
+        #{userFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="userTo != null">
+        #{userTo,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="makedate != null">
+        #{makedate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zihai.entity.TransLog">
+    update zih_translog
+    <set>
+      <if test="userFrom != null">
+        user_from = #{userFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="userTo != null">
+        user_to = #{userTo,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null">
+        amt = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="makedate != null">
+        makedate = #{makedate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where trans_id = #{transId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zihai.entity.TransLog">
+    update zih_translog
+    set user_from = #{userFrom,jdbcType=VARCHAR},
+      user_to = #{userTo,jdbcType=VARCHAR},
+      amt = #{amt,jdbcType=DECIMAL},
+      state = #{state,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      makedate = #{makedate,jdbcType=TIMESTAMP}
+    where trans_id = #{transId,jdbcType=VARCHAR}
+  </update>
+</mapper>

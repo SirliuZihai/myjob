@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zihai.dao.UserDao">
+  <resultMap id="BaseResultMap" type="com.zihai.entity.User">
+    <id column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="question" jdbcType="VARCHAR" property="question" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="auth" jdbcType="VARCHAR" property="auth" />
+    <result column="makedatetime" jdbcType="TIMESTAMP" property="makedatetime" />
+    <result column="modifydatetime" jdbcType="TIMESTAMP" property="modifydatetime" />
+  </resultMap>
+  <resultMap id="AccountMap" type="User">
+  	<id property="username" column="username"/>
+		<association property="username" column="username" javaType="Account">
+			<id property="username" column="username"/>
+			<result property="money" column="money"/>
+		</association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    username, password, email, phone, question, answer, auth, makedatetime, modifydatetime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zih_user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from zih_user
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zihai.entity.User">
+    insert into zih_user (username, password, email, 
+      phone, question, answer, 
+      auth, makedatetime, modifydatetime
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
+      #{auth,jdbcType=VARCHAR}, #{makedatetime,jdbcType=TIMESTAMP}, #{modifydatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zihai.entity.User">
+    insert into zih_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="question != null">
+        question,
+      </if>
+      <if test="answer != null">
+        answer,
+      </if>
+      <if test="auth != null">
+        auth,
+      </if>
+      <if test="makedatetime != null">
+        makedatetime,
+      </if>
+      <if test="modifydatetime != null">
+        modifydatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null">
+        #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="auth != null">
+        #{auth,jdbcType=VARCHAR},
+      </if>
+      <if test="makedatetime != null">
+        #{makedatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifydatetime != null">
+        #{modifydatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zihai.entity.User">
+    update zih_user
+    <set>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null">
+        question = #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="auth != null">
+        auth = #{auth,jdbcType=VARCHAR},
+      </if>
+      <if test="makedatetime != null">
+        makedatetime = #{makedatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifydatetime != null">
+        modifydatetime = #{modifydatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zihai.entity.User">
+    update zih_user
+    set password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      question = #{question,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR},
+      auth = #{auth,jdbcType=VARCHAR},
+      makedatetime = #{makedatetime,jdbcType=TIMESTAMP},
+      modifydatetime = #{modifydatetime,jdbcType=TIMESTAMP}
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+  <select id="getAccount" parameterType="User" resultMap="AccountMap">
+  	select u.username,a.money from zih_user u 
+  	left join zih_account a on u.username = a.username 
+  	where u.username = #{username}
+  </select>
+</mapper>
