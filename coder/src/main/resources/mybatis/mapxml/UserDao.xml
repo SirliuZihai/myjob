@@ -11,13 +11,14 @@
     <result column="auth" jdbcType="VARCHAR" property="auth" />
     <result column="makedatetime" jdbcType="TIMESTAMP" property="makedatetime" />
     <result column="modifydatetime" jdbcType="TIMESTAMP" property="modifydatetime" />
-  </resultMap>
-  <resultMap id="AccountMap" type="User">
-  	<id property="username" column="username"/>
-		<association property="username" column="username" javaType="Account">
+    <association property="account"  column="username" javaType="Account">
 			<id property="username" column="username"/>
-			<result property="money" column="money"/>
-		</association>
+			<result column="money" jdbcType="DECIMAL" property="money" />
+	</association>
+  </resultMap>
+  <resultMap id="AccountMap" type="User" extends="BaseResultMap" >
+  		 <id column="username" jdbcType="VARCHAR" property="username" />
+		
   </resultMap>
   <sql id="Base_Column_List">
     username, password, email, phone, question, answer, auth, makedatetime, modifydatetime
@@ -146,8 +147,8 @@
     where username = #{username,jdbcType=VARCHAR}
   </update>
   <select id="getAccount" parameterType="User" resultMap="AccountMap">
-  	select u.username,a.money from zih_user u 
+  	select u.username,a.money,u.email,u.modifydatetime from zih_user u 
   	left join zih_account a on u.username = a.username 
-  	where u.username = #{username}
+  	where a.credit = #{account.credit}
   </select>
 </mapper>

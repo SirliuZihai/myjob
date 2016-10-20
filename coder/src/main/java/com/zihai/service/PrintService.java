@@ -1,4 +1,4 @@
-package com.zihai.service.print;
+package com.zihai.service;
 
 public interface PrintService {
 	public void print(String name);
