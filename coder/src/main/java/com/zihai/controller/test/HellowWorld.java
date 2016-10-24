@@ -31,6 +31,7 @@ public class HellowWorld  {
 	public String hellow(String name,Model model){
 		log.info("the name:"+name);
 		print.print(name);
+		//print.insertTest(num);
 		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";
 	}

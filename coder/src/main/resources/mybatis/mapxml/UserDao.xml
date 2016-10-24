@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zihai.dao.UserDao">
+	<!-- 开启二级缓存 -->
+	<cache 
+		eviction="FIFO"  
+		flushInterval ="1000" 
+		size="512" 
+		readOnly="true" />
+
   <resultMap id="BaseResultMap" type="com.zihai.entity.User">
     <id column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
@@ -11,14 +18,22 @@
     <result column="auth" jdbcType="VARCHAR" property="auth" />
     <result column="makedatetime" jdbcType="TIMESTAMP" property="makedatetime" />
     <result column="modifydatetime" jdbcType="TIMESTAMP" property="modifydatetime" />
-    <association property="account"  column="username" javaType="Account">
-			<id property="username" column="username"/>
-			<result column="money" jdbcType="DECIMAL" property="money" />
-	</association>
+
   </resultMap>
-  <resultMap id="AccountMap" type="User" extends="BaseResultMap" >
-  		 <id column="username" jdbcType="VARCHAR" property="username" />
-		
+  <resultMap id="RelateMap" type="User" extends="BaseResultMap" >
+  		<association property="account"  javaType="Account">
+			<id property="username" column="username"/>
+			 <result column="money" jdbcType="DECIMAL" property="money" /> 
+		</association>
+		<association property="userinfo"  column="username" javaType="UserInfo">
+			<id column="username" jdbcType="VARCHAR" property="username" />
+		    <result column="name" jdbcType="VARCHAR" property="name" />
+		    <result column="birthday" jdbcType="DATE" property="birthday" />
+		    <result column="country" jdbcType="VARCHAR" property="country" />
+		    <result column="province" jdbcType="VARCHAR" property="province" />
+		    <result column="city" jdbcType="VARCHAR" property="city" />
+		    <result column="address" jdbcType="VARCHAR" property="address" />
+		</association>	
   </resultMap>
   <sql id="Base_Column_List">
     username, password, email, phone, question, answer, auth, makedatetime, modifydatetime
@@ -146,9 +161,16 @@
       modifydatetime = #{modifydatetime,jdbcType=TIMESTAMP}
     where username = #{username,jdbcType=VARCHAR}
   </update>
-  <select id="getAccount" parameterType="User" resultMap="AccountMap">
-  	select u.username,a.money,u.email,u.modifydatetime from zih_user u 
-  	left join zih_account a on u.username = a.username 
-  	where a.credit = #{account.credit}
+  <select id="getAccount" parameterType="User" resultMap="RelateMap">
+  	select u.username,u.email,u.modifydatetime,a.money from zih_user u 
+  	 left join zih_account a on u.username = a.username 
+  	where u.username = #{username} 
+  </select>
+  
+  <select id='list' parameterType="PageEntity" resultMap="RelateMap">
+  		select * from zih_user limit #{start},#{pageSize}
+  </select>
+  <select id="count" parameterType="User" resultType="int">
+  		select count(*) from zih_user
   </select>
 </mapper>

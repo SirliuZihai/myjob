@@ -1,9 +1,13 @@
 package com.zihai.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
-    private String username;
+public class User implements Serializable{
+ 
+	private static final long serialVersionUID = 1L;
+
+	private String username;
 
     private String password;
 
@@ -21,7 +25,14 @@ public class User {
 
     private Date modifydatetime;
     
+    /**
+     * 关联查询 Account
+     * */
     private Account account;
+    /**
+     * 关联查询userinfo
+     * */
+    private UserInfo userinfo;
 
     public String getUsername() {
         return username;
@@ -101,6 +112,14 @@ public class User {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public UserInfo getUserinfo() {
+		return userinfo;
+	}
+
+	public void setUserinfo(UserInfo userinfo) {
+		this.userinfo = userinfo;
 	}
     
 }

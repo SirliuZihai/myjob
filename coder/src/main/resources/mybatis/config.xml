@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+ 	<settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
     <typeAliases>
         <typeAlias alias="Account" type="com.zihai.entity.Account"/><!--帐户表 -->
         <typeAlias alias="TransLog" type="com.zihai.entity.TransLog"/>
         <typeAlias alias="User" type="com.zihai.entity.User"/>
         <typeAlias alias="UserInfo" type="com.zihai.entity.UserInfo"/>
+        <typeAlias alias="PageEntity" type="com.zihai.entity.PageEntity"/>
     </typeAliases>
+    
 </configuration>

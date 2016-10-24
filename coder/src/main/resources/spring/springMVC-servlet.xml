@@ -18,13 +18,33 @@
  			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 <!-- 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" /> -->
  	</context:component-scan>
- 	 
+ 	 <!-- 启动SpringMVC的注解功能，它会自动注册HandlerMapping、 HandlerAdapter、ExceptionResolver的相关实例 
+ 	 并注册converter问题-->
+ 	 <mvc:annotation-driven />  	
+	  <bean class="org.springframework.http.converter.ResourceHttpMessageConverter" /> 
+	  <bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >  
+	       <property name="supportedMediaTypes">  
+	          <list>  
+	            <value>text/html;charset=UTF-8</value>  
+	            <value>text/json;charset=UTF-8</value>
+	            <value>application/json;charset=UTF-8</value>
+	          </list>   
+	       </property>  
+	 </bean>
 
 	<!-- HandlerMapping -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 	
 	<!-- HandlerAdapter-->
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter "/>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter ">
+		<property name="messageConverters">
+			<list>
+			    <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/><!-- 解析导出文件byte流 --> 
+			 <!--    <ref bean="fastJsonHttpMessageConverter" /> -->
+				 <ref bean="mappingJackson2HttpMessageConverter" /> 
+			</list>
+		</property>
+	</bean>
 	
 	<!-- ViewResolver -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -61,4 +81,31 @@
 		   </props>
 		  </property>
 	 </bean>
+	 <!-- 使用fastJson来支持JSON数据格式 -->
+	<bean id="fastJsonHttpMessageConverter"
+	      class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+	    <property name="supportedMediaTypes">
+	        <list>
+	            <!--解决IE JSON提示下载的问题-->
+	            <value>text/html;charset=UTF-8</value>
+	            <value>application/json;charset=UTF-8</value>
+	        </list>
+	    </property>
+	    <property name="features">
+	        <array>
+	            <!--NULL过滤-->
+	            <value>QuoteFieldNames</value>
+	            <value>WriteMapNullValue</value>
+	            <value>WriteNullStringAsEmpty</value>
+	            <value>WriteNullListAsEmpty</value>
+	            <value>WriteNullNumberAsZero</value>
+	            <value>WriteNullBooleanAsFalse</value>
+	
+	            <!--浏览器兼容-->
+	            <value>BrowserCompatible</value>
+	            <!--斜杠处理-->
+	            <value>WriteSlashAsSpecial</value>
+	        </array>
+	    </property>
+	</bean>
 </beans>

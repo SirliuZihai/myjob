@@ -21,16 +21,18 @@ public class TransServiceIml implements TransService {
 	@Autowired
 	private TransLogDao transdao;
 
-	@Transactional
-	public boolean trans(TransLog trans) throws Exception{
+	@Transactional(rollbackFor={BusinessException.class})
+	public boolean trans(TransLog trans) throws BusinessException{
 		System.out.println("the trans is from "+trans.getUserFrom());
 		transdao.insertSelective(trans);
 		Account accountFrom = accountdao.selectByPrimaryKey(trans.getUserFrom());
 		accountFrom.setMoney(accountFrom.getMoney().add(trans.getAmt().negate()));
 		if(accountFrom.getMoney().compareTo(new BigDecimal(0)) ==-1)
 			throw new BusinessException("余额不足");
+		accountdao.updateByPrimaryKey(accountFrom);
 		Account accountTo = accountdao.selectByPrimaryKey(trans.getUserTo());
 		accountTo.setMoney(accountTo.getMoney().add(trans.getAmt()));
+		accountdao.updateByPrimaryKey(accountTo);
 		trans.setState("0");
 		transdao.updateByPrimaryKey(trans);
 		// TODO Auto-generated method stub

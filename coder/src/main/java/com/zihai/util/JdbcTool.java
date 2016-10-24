@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
+import com.zihai.entity.User;
+
 /**
  * 
  * */
@@ -35,5 +37,10 @@ public class JdbcTool<T> {
 	public void example(){
 		/*JdbcTool<Person> tool = new JdbcTool<Person>();
 		List<Person> list = tool.doSelect("select * from Person", Person.class);*/
+	}
+	public static void main(String args[]){
+		JdbcTool<User> tool = new JdbcTool<User>();
+		List<User> list = tool.doSelect("select * from zih_user",User.class);
+		System.out.println(list.get(0).getPassword());
 	}
 }
