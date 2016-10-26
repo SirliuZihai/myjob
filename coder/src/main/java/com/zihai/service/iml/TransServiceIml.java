@@ -22,9 +22,8 @@ public class TransServiceIml implements TransService {
 	private TransLogDao transdao;
 
 	@Transactional(rollbackFor={BusinessException.class})
-	public boolean trans(TransLog trans) throws BusinessException{
+	public boolean trans(TransLog trans,String...args) throws BusinessException{
 		System.out.println("the trans is from "+trans.getUserFrom());
-		transdao.insertSelective(trans);
 		Account accountFrom = accountdao.selectByPrimaryKey(trans.getUserFrom());
 		accountFrom.setMoney(accountFrom.getMoney().add(trans.getAmt().negate()));
 		if(accountFrom.getMoney().compareTo(new BigDecimal(0)) ==-1)
@@ -34,8 +33,13 @@ public class TransServiceIml implements TransService {
 		accountTo.setMoney(accountTo.getMoney().add(trans.getAmt()));
 		accountdao.updateByPrimaryKey(accountTo);
 		trans.setState("0");
-		transdao.updateByPrimaryKey(trans);
-		// TODO Auto-generated method stub
+		if(args.length==1){
+			try {
+				Thread.currentThread().sleep(Integer.parseInt(args[0]));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		return true;
 	}
 

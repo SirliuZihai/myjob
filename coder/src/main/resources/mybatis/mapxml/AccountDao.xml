@@ -75,8 +75,7 @@
   <update id="updateByPrimaryKey" parameterType="com.zihai.entity.Account">
     update zih_account
     set money = #{money,jdbcType=DECIMAL},
-      credit = #{credit,jdbcType=CHAR},
-      modifydate = #{modifydate,jdbcType=TIMESTAMP}
+      credit = #{credit,jdbcType=CHAR}
     where username = #{username,jdbcType=VARCHAR}
   </update>
 </mapper>

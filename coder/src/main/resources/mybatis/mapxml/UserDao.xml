@@ -168,7 +168,10 @@
   </select>
   
   <select id='list' parameterType="PageEntity" resultMap="RelateMap">
-  		select * from zih_user limit #{start},#{pageSize}
+  		select u.*,a.money,i.name,i.address from zih_user u
+  		left join zih_account a on u.username = a.username 
+  		left join zih_userinfo i on u.username = i.username
+  		limit #{start},#{pageSize}
   </select>
   <select id="count" parameterType="User" resultType="int">
   		select count(*) from zih_user

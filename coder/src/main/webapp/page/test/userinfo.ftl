@@ -5,8 +5,8 @@
 	<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> 
 	<META HTTP-EQUIV="Expires" CONTENT="0"> 
 	<title>用户信息</title>
-	<script type="text/javascript" src="../js/lib/jquery.min.js"></script>
-	<script type="text/javascript" src="../js/lib/jquery.easyui.min.js"></script>
+	<#include "../common/common.ftl">
+	
 </head>
 <body>
 	<div style="border:1px solid #D8D8D8;padding: 10px 0px 10px 0px;">
@@ -14,14 +14,14 @@
 		    <thead>
 	    		<tr>
 	    			<th halign="center" align="center" field="ck" checkbox=true></th>
-	    			<th halign="center" align="center" field="uername"  sortable="true">用户名</th>
-	    			<!-- <th halign="center" align="center" field="userinfo.name" width="40"  sortable="true">姓名</th> -->
-	    			<!-- <th halign="center" align="center" field="userinfo.address" width="40"  sortable="true">地址</th> -->
-	    			<th halign="center" align="center" field="phone"  sortable="true">手机号</th>
+	    			<th halign="center" align="center" field="username" >用户名</th>
+	    			 <th halign="center" align="center"  field="userinfo.name" formatter="fmtld" >姓名</th>
+	    			 <th halign="center" align="center" field="userinfo.address" formatter="fmtld">地址</th>
+	    			<th halign="center" align="center" field="phone" >手机号</th>
 	    			<th halign="center" align="center" field="email" >邮箱</th>
-	    			<!-- <th halign="center" align="center" field="account.money" width="40" >余额</th> -->
-	    			<!-- <th halign="center" align="center" field="used" width="40" formatter="formatState">任务状态</th> -->
-	    			<th halign="center" align="center" field="makedatetime"  >注册时间</th>
+	    			<th halign="center" align="center" field="account.money" formatter="fmtld" >余额</th> 
+	    			 <!-- formatter="fmtDateTime"<th halign="center" align="center" field="used" width="40" formatter="formatState">任务状态</th> -->
+	    			<th halign="center" align="center" field="makedatetime" formatter="fmtDate" >注册时间</th>
 	    		</tr> 
 	    	</thead>
 	    </table>
@@ -33,25 +33,31 @@
     	<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editWork()">编辑</a>
     	<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="deleteWork()">删除</a>
     </div>
-    <script type="text/javascript">
-    $(function(){
-    	//以后封装
-    	$('#dg').datagrid({    
-    		loadMsg:'加载数据中...',
-    	    pagination:true,
-    	    singleSelect:true,
-    	    rownumbers:true,
-    	    fitColumns:true,
-    	    striped:true,
-    	  
-    	   
-    	});
-    	
-    	$('#dg').datagrid({
-    		url:'list.do',
-    	});
-    	
-    });
-    </script>
+<script type="text/javascript">
+$(function(){
+	//以后封装
+	$('#dg').datagrid({    
+		loadMsg:'加载数据中...',
+	    pagination:true,
+	    singleSelect:true,
+	    rownumbers:true,
+	    fitColumns:true,
+	    striped:true
+	});
+	
+	$('#dg').datagrid({
+		url:'list.do'
+	});
+});
+
+function getName(row){
+	return row!=null?row[userinfo][name]:"";
+}
+function getAddress(value){
+	return value!=null?value.address:"";
+}
+
+
+</script>
     </body>
 </html>

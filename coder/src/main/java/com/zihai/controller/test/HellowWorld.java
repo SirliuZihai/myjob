@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zihai.dao.TransLogDao;
 import com.zihai.entity.TransLog;
 import com.zihai.service.PrintService;
 import com.zihai.service.TransService;
@@ -26,6 +27,8 @@ public class HellowWorld  {
 	private PrintService print;
 	@Autowired
 	private TransService transService;
+	@Autowired
+	private TransLogDao transLogDao;
 	
 	@RequestMapping("/world")
 	public String hellow(String name,Model model){
@@ -35,23 +38,29 @@ public class HellowWorld  {
 		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";
 	}
-	@RequestMapping("/trans")
+	@RequestMapping("/trandshow.do")
+	public String trandshow(String name,Model model){
+		return "test/tradetest";
+	}
+	@RequestMapping("/trans.do")
 	@ResponseBody
-	public String trans(int id){
-		TransLog trans = new TransLog();
-		trans.setUserFrom("zihai");
-		trans.setUserTo("qq");
-		trans.setRemark("测试");
-		if(id==-1){
-			trans.setAmt(new BigDecimal(55));
-		}else{
-			trans.setAmt(new BigDecimal(22));
-		}
+	public String trans(TransLog trans,String timesleep){
+		System.out.println("get value is:"+trans.getUserFrom()+" "+trans.getUserTo()+" "+trans.getAmt()+" "+timesleep);
 		try {
-			transService.trans(trans);
+			trans.setTransId(transLogDao.getSeq());
+			transLogDao.insertSelective(trans);
+			if(!"".equals(timesleep)){
+				transService.trans(trans,timesleep);
+			}else{
+				transService.trans(trans);
+			}
+			trans.setState("0");
 		} catch (Exception e) {
+			trans.setState("2");
 			System.out.println(e.getMessage());
 			return e.getMessage();
+		}finally{
+			transLogDao.updateByPrimaryKeySelective(trans);
 		}
 		return "OK";
 	}

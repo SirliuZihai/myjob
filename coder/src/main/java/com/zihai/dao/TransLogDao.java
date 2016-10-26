@@ -14,4 +14,6 @@ public interface TransLogDao {
     int updateByPrimaryKeySelective(TransLog record);
 
     int updateByPrimaryKey(TransLog record);
+    
+    String getSeq();
 }

@@ -19,25 +19,20 @@
     from zih_translog
     where trans_id = #{transId,jdbcType=VARCHAR}
   </select>
+   <select id="getSeq" resultType="java.lang.String">
+   	SELECT nextval('TestSeq')
+   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from zih_translog
     where trans_id = #{transId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.zihai.entity.TransLog">
-    <selectKey keyProperty="transId" order="BEFORE" resultType="java.lang.String">
-      SELECT nextval('TestSeq')
-    </selectKey>
     insert into zih_translog (trans_id, user_from, user_to, 
-      amt, state, remark, 
-      makedate)
+      amt, state, remark)
     values (#{transId,jdbcType=VARCHAR}, #{userFrom,jdbcType=VARCHAR}, #{userTo,jdbcType=VARCHAR}, 
-      #{amt,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{makedate,jdbcType=TIMESTAMP})
+      #{amt,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zihai.entity.TransLog">
-    <selectKey keyProperty="transId" order="BEFORE" resultType="java.lang.String">
-      SELECT nextval('TestSeq')
-    </selectKey>
     insert into zih_translog
     <trim prefix="(" suffix=")" suffixOverrides=",">
       trans_id,
@@ -56,9 +51,6 @@
       <if test="remark != null">
         remark,
       </if>
-      <if test="makedate != null">
-        makedate,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       #{transId,jdbcType=VARCHAR},
@@ -76,9 +68,6 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="makedate != null">
-        #{makedate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -100,9 +89,6 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="makedate != null">
-        makedate = #{makedate,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where trans_id = #{transId,jdbcType=VARCHAR}
   </update>
@@ -113,7 +99,6 @@
       amt = #{amt,jdbcType=DECIMAL},
       state = #{state,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      makedate = #{makedate,jdbcType=TIMESTAMP}
     where trans_id = #{transId,jdbcType=VARCHAR}
   </update>
 </mapper>

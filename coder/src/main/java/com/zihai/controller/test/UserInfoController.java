@@ -25,4 +25,5 @@ public class UserInfoController {
 	public Page<User> list(int page,int rows,User user){
 		return service.list(rows, page, user);
 	}
+
 }
