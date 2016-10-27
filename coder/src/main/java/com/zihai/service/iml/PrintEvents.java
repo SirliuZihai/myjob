@@ -62,6 +62,7 @@ public class PrintEvents implements PrintService {
 			info.setUsername(user.getUsername());
 			info.setCountry("Chinese");
 			info.setName(RanddomDateUtil.getChineseName());
+			info.setSex(RanddomDateUtil.name_sex);
 			infodao.insertSelective(info);
 			account.setCredit("1");
 			account.setUsername(user.getUsername());

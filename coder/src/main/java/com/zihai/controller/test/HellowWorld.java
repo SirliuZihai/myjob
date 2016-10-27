@@ -38,6 +38,13 @@ public class HellowWorld  {
 		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";
 	}
+	@RequestMapping("/insert")
+	@ResponseBody
+	public String insert(int num){
+		print.insertTest(num);
+		//print.insertTest(num);
+		return "OK";
+	}
 	@RequestMapping("/trandshow.do")
 	public String trandshow(String name,Model model){
 		return "test/tradetest";
@@ -47,8 +54,7 @@ public class HellowWorld  {
 	public String trans(TransLog trans,String timesleep){
 		System.out.println("get value is:"+trans.getUserFrom()+" "+trans.getUserTo()+" "+trans.getAmt()+" "+timesleep);
 		try {
-			trans.setTransId(transLogDao.getSeq());
-			transLogDao.insertSelective(trans);
+			trans.setTransId(transService.getSerialno());
 			if(!"".equals(timesleep)){
 				transService.trans(trans,timesleep);
 			}else{
@@ -60,7 +66,7 @@ public class HellowWorld  {
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}finally{
-			transLogDao.updateByPrimaryKeySelective(trans);
+			transLogDao.insertSelective(trans);
 		}
 		return "OK";
 	}

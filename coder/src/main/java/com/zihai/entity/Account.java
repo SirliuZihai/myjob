@@ -11,7 +11,7 @@ public class Account {
     private String credit;
 
     private Date modifydate;
-
+    
     public String getUsername() {
         return username;
     }
@@ -43,4 +43,6 @@ public class Account {
     public void setModifydate(Date modifydate) {
         this.modifydate = modifydate;
     }
+
+    
 }

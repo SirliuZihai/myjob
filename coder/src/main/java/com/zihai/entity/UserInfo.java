@@ -6,6 +6,8 @@ public class UserInfo {
     private String username;
 
     private String name;
+    
+    private String sex;
 
     private Date birthday;
 
@@ -33,7 +35,16 @@ public class UserInfo {
         this.name = name == null ? null : name.trim();
     }
 
-    public Date getBirthday() {
+    
+    public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public Date getBirthday() {
         return birthday;
     }
 
