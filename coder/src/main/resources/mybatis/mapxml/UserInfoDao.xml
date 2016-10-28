@@ -7,12 +7,11 @@
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="birthday" jdbcType="DATE" property="birthday" />
     <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="address" jdbcType="VARCHAR" property="address" />
   </resultMap>
   <sql id="Base_Column_List">
-    username, name,sex, birthday, country, province, city, address
+    username, name,sex, birthday, country, area, address
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -25,12 +24,9 @@
     where username = #{username,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.zihai.entity.UserInfo">
-    insert into zih_userinfo (username, name,sex,birthday, 
-      country, province, city, 
-      address)
+    insert into zih_userinfo ( <include refid="Base_Column_List" />)
     values (#{username,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
-      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR})
+      #{country,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zihai.entity.UserInfo">
     insert into zih_userinfo
@@ -50,11 +46,8 @@
       <if test="country != null">
         country,
       </if>
-      <if test="province != null">
-        province,
-      </if>
-      <if test="city != null">
-        city,
+      <if test="area != null">
+        area,
       </if>
       <if test="address != null">
         address,
@@ -76,11 +69,8 @@
       <if test="country != null">
         #{country,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        #{city,jdbcType=VARCHAR},
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
       </if>
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
@@ -93,7 +83,7 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-       <if test="name != null">
+       <if test="sex != null">
         sex = #{sex,jdbcType=VARCHAR},
       </if>
       <if test="birthday != null">
@@ -102,11 +92,8 @@
       <if test="country != null">
         country = #{country,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        city = #{city,jdbcType=VARCHAR},
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
       </if>
       <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
@@ -120,8 +107,7 @@
     	sex = #{sex,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=DATE},
       country = #{country,jdbcType=VARCHAR},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR}
     where username = #{username,jdbcType=VARCHAR}
   </update>

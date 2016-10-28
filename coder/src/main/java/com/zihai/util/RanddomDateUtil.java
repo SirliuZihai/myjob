@@ -1,9 +1,14 @@
 package com.zihai.util;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;  
-import java.util.Map;  
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;  
   
 /** 
  * 随机生成中文姓名，性别，Email，手机号，住址 
@@ -117,12 +122,20 @@ public class RanddomDateUtil {
         return map;  
     }  
       
-    public static void main(String args[]) {  
-        for (int i = 0; i < 100; i++) {  
-           // System.out.println(getAddress());  
-//          System.out.println(getEmailName(6,9));  
-        	//System.out.println(new BigDecimal(getNum(0,9999999)).movePointLeft(2));;
-        	System.out.println(randEnglish());
-        }  
+    public static void main(String args[]) throws IOException {
+    	List<String> list = new JdbcTool<String>().queryForList("select id from areas",String.class);
+    	for(int j =0;j<9;j++){
+    		FileWriter writer = new FileWriter("D:\\data+"+j+".csv");
+        	writer.write("username,password,email,phone,makedatetime,name,sex,country,area,address,money,cridit,modifydate+\r\n");
+            for (int i = 0; i < 2000000; i++) {
+            	String time = String.valueOf(new Timestamp(System.currentTimeMillis()));
+            	writer.write(randEnglish()+","+UUID.randomUUID().toString()+","+getEmail(3, 9)+","+getTel()+","+time+","+
+            	getChineseName()+","+name_sex+",中国,"+list.get(getNum(0,list.size()-1))+","+getRoad()+","+new BigDecimal(getNum(0,9999999)).movePointLeft(2)+
+            	","+getNum(0,100)+","+time+"\r\n");
+            }
+            writer.close();
+            System.out.println("完成第"+j+"份");
+    	}
+    	
     }  
 } 

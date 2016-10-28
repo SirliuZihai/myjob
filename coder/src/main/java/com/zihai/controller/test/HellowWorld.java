@@ -2,6 +2,7 @@ package com.zihai.controller.test;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -66,6 +67,7 @@ public class HellowWorld  {
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}finally{
+			trans.setMakedate(new Date());
 			transLogDao.insertSelective(trans);
 		}
 		return "OK";

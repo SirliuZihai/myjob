@@ -13,11 +13,10 @@ public class MethedTest {
 			System.out.println(i);
 		}
 	}
-
+	
 	public static void main(String[] args) {
-	//	print(3,"dd","aa");
-		String aa=null;
-		System.out.println(aa);
+		
+		System.out.println(Integer.parseInt("AZ10034"));
 
 	}
 

@@ -28,6 +28,10 @@ public class JdbcTool<T> {
     	return  list ;
 	}
 	
+	public List<T> queryForList(String sql,Class<T> clazz){
+		return (List<T>) dao.getJdbcTemplate().queryForList("select id from areas",clazz);
+	}
+	
 	public void doSql(String sql){
 		dao.getJdbcTemplate().execute(sql);
 	}
@@ -39,8 +43,8 @@ public class JdbcTool<T> {
 		List<Person> list = tool.doSelect("select * from Person", Person.class);*/
 	}
 	public static void main(String args[]){
-		JdbcTool<User> tool = new JdbcTool<User>();
-		List<User> list = tool.doSelect("select * from zih_user",User.class);
-		System.out.println(list.get(0).getPassword());
+		JdbcTool<String> tool = new JdbcTool<String>();
+		List<String> list = dao.getJdbcTemplate().queryForList("select id from areas", String.class);
+		System.out.println("size:"+list.size()+"11位："+list.get(11));
 	}
 }

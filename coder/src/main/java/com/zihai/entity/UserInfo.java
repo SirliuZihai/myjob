@@ -13,9 +13,7 @@ public class UserInfo {
 
     private String country;
 
-    private String province;
-
-    private String city;
+    private String area;
 
     private String address;
 
@@ -60,23 +58,15 @@ public class UserInfo {
         this.country = country == null ? null : country.trim();
     }
 
-    public String getProvince() {
-        return province;
-    }
+    public String getArea() {
+		return area;
+	}
 
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
-    }
+	public void setArea(String area) {
+		this.area = area;
+	}
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
-    }
-
-    public String getAddress() {
+	public String getAddress() {
         return address;
     }
 
