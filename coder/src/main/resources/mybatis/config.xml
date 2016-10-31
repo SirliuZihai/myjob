@@ -11,6 +11,7 @@
         <typeAlias alias="User" type="com.zihai.entity.User"/>
         <typeAlias alias="UserInfo" type="com.zihai.entity.UserInfo"/>
         <typeAlias alias="PageEntity" type="com.zihai.entity.PageEntity"/>
+         <typeAlias alias="Area" type="com.zihai.entity.Area"/>
     </typeAliases>
     
 </configuration>

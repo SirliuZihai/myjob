@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zihai.dao.AreaDao">
+  <resultMap id="BaseResultMap" type="com.zihai.entity.Area">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="areaname" jdbcType="VARCHAR" property="areaname" />
+    <result column="parentid" jdbcType="VARCHAR" property="parentid" />
+    <result column="shortname" jdbcType="VARCHAR" property="shortname" />
+    <result column="lng" jdbcType="DECIMAL" property="lng" />
+    <result column="lat" jdbcType="DECIMAL" property="lat" />
+    <result column="level" jdbcType="CHAR" property="level" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="sort" jdbcType="CHAR" property="sort" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, areaname, parentid, shortname, lng, lat, level, position, sort
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from areas
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from areas
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zihai.entity.Area">
+    insert into areas (id, areaname, parentid, 
+      shortname, lng, lat, 
+      level, position, sort)
+    values (#{id,jdbcType=VARCHAR}, #{areaname,jdbcType=VARCHAR}, #{parentid,jdbcType=VARCHAR}, 
+      #{shortname,jdbcType=VARCHAR}, #{lng,jdbcType=DECIMAL}, #{lat,jdbcType=DECIMAL}, 
+      #{level,jdbcType=CHAR}, #{position,jdbcType=VARCHAR}, #{sort,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zihai.entity.Area">
+    insert into areas
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="areaname != null">
+        areaname,
+      </if>
+      <if test="parentid != null">
+        parentid,
+      </if>
+      <if test="shortname != null">
+        shortname,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="areaname != null">
+        #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null">
+        #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="shortname != null">
+        #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=DECIMAL},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=CHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zihai.entity.Area">
+    update areas
+    <set>
+      <if test="areaname != null">
+        areaname = #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null">
+        parentid = #{parentid,jdbcType=VARCHAR},
+      </if>
+      <if test="shortname != null">
+        shortname = #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=DECIMAL},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=CHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zihai.entity.Area">
+    update areas
+    set areaname = #{areaname,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=VARCHAR},
+      shortname = #{shortname,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=DECIMAL},
+      lat = #{lat,jdbcType=DECIMAL},
+      level = #{level,jdbcType=CHAR},
+      position = #{position,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=CHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="getParentID" resultType="java.lang.String">
+  select parentid from areas GROUP BY parentid
+  </select>
+  <select id="selectAll" resultType="Area">
+  select * from areas
+  </select>
+</mapper>

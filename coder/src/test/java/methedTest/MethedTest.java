@@ -16,7 +16,7 @@ public class MethedTest {
 	
 	public static void main(String[] args) {
 		
-		System.out.println(Integer.parseInt("AZ10034"));
+		System.out.println("".length());
 
 	}
 

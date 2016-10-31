@@ -16,6 +16,8 @@ public class UserInfo {
     private String area;
 
     private String address;
+    
+    private Area areainfo;
 
     public String getUsername() {
         return username;
@@ -73,4 +75,13 @@ public class UserInfo {
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
     }
+
+	public Area getAreainfo() {
+		return areainfo;
+	}
+
+	public void setAreainfo(Area areainfo) {
+		this.areainfo = areainfo;
+	}
+    
 }

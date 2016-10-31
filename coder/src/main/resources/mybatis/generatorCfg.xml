@@ -51,8 +51,8 @@
           
         <!-- 配置表信息，这里没生成一张表，这里需要改变一次对应表名 -->    
        
-        <table schema="zihai" tableName="zih_user"  mapperName="UserDao"
-            domainObjectName="User" 
+        <table schema="zihai" tableName="areas"  mapperName="AreaDao"
+            domainObjectName="Area" 
          enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="falses" /> 
          
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample   
