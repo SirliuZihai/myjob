@@ -3,6 +3,8 @@ package collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.junit.Test;
+
 public class IteratorTest {
 
 	public static void main(String[] args) {
@@ -17,7 +19,7 @@ public class IteratorTest {
 			System.out.println(it.next());
 		}
 	}
-	
+	@Test
 	public void Test1(){
 		HashMap<String,String> map = new HashMap<String,String>();
 		map.put("1", "liu");

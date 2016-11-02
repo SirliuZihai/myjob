@@ -1,12 +1,15 @@
 package com.zihai.common;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * 该数据结构对应easyUI树
  * */
-public class TreeNode {
+public class TreeNode implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	//private TreeNode parent;
 	private String id;
 	private String text;

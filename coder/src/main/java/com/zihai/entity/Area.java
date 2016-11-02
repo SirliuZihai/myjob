@@ -1,9 +1,12 @@
 package com.zihai.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Area {
-    private String id;
+public class Area implements Serializable{
+	private static final long serialVersionUID = 1L;
+
+	private String id;
 
     private String areaname;
 

@@ -10,6 +10,7 @@ import com.zihai.entity.User;
 
 public interface UserinfoService {
 	public List<TreeNode> getAreaTree(String id);
+	public List<TreeNode> getAreaTree2();
 	public Map<String,Area> getAreaMap();
 	public Page<User> list(int pageSize,int Pagenum,User user);
 }

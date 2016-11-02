@@ -23,7 +23,7 @@ public class UserInfoController {
 	@Autowired
 	private UserinfoService service;
 	
-	private TreeNode nodeCache;
+	
 
 	
 	@RequestMapping("/show.do")
@@ -46,47 +46,8 @@ public class UserInfoController {
 	@RequestMapping("/areaAll2.do")
 	@ResponseBody
 	public List<TreeNode> areaAll2(){
-		ArrayList<TreeNode> array = new ArrayList<TreeNode>();
-		if(nodeCache!=null){
-			array.add(nodeCache);
-			return array;
-		}
-			
-		TreeNode node = new TreeNode();
-		node.setId("0");
-		node.setState("closed");
-		node.setText("中国");
-		HashMap<String,Area> map = (HashMap<String, Area>) ((HashMap<String, Area>) service.getAreaMap()).clone();
-		insertNode(map,node);
-		nodeCache = node;
-		//array.add(node);
-		return node.getChildren();
+		return service.getAreaTree2();
 	}
 	
-	//组装树节点
-		private void insertNode(HashMap<String, Area> areas,TreeNode node){
-			Iterator<String> it = areas.keySet().iterator();
-			while(it.hasNext()){
-				String id = it.next();
-				Area area = areas.get(id);
-				if(node.getId().equals(area.getParentid())){
-					if(node.getChildren()==null)
-						node.setChildren(new ArrayList<TreeNode>());
-					TreeNode node2 = new TreeNode();
-					//node2.setParentNode(node);
-					node2.setId(area.getId());
-					node2.setState("closed");
-					node2.setText(area.getAreaname());
-					node.getChildren().add(node2);
-					it.remove();
-				}
-			}
-			if(node.getChildren()==null){
-				node.setState("open");
-				return;
-			}
-			for(TreeNode node3:node.getChildren()){
-				insertNode(areas,node3);
-			}
-		}
+	
 }

@@ -7,7 +7,8 @@
 		flushInterval ="1000" 
 		size="512" 
 		readOnly="true" />-->
-		<cache readOnly = "true"/>
+		<cache type="com.zihai.common.RedisCache" readOnly = "true"/>
+		<!-- <cache readOnly = "true"/> -->
 
   <resultMap id="BaseResultMap" type="com.zihai.entity.User">
     <id column="username" jdbcType="VARCHAR" property="username" />
@@ -173,7 +174,7 @@
   	where u.username = #{username} 
   </select>
   
-  <select id='list' parameterType="PageEntity" resultMap="RelateMap">
+  <select id='list' parameterType="PageEntity" resultMap="RelateMap" useCache="false">
   		select u.*,a.*,i.*,s.*from zih_user u
   		left join zih_account a on u.username = a.username 
   		left join zih_userinfo i on u.username = i.username
