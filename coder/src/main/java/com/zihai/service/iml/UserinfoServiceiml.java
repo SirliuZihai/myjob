@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zihai.common.Page;
 import com.zihai.common.TreeNode;
 import com.zihai.dao.AreaDao;
@@ -62,9 +64,9 @@ public class UserinfoServiceiml implements UserinfoService {
 	 */
 	@Override
 	public HashMap<String , Area> getAreaMap(){
-		Object obj = redisService.get("AreaMap");
+		Object obj = redisService.get("AreaMap",HashMap.class);
 		if(obj!=null)
-			return (HashMap<String , Area>) obj;
+			return (HashMap<String, Area>) obj;
 		List<Area> listAll = areaDao.selectAll();//取出所有地区
 		HashMap<String,Area> areaMap = new HashMap<String,Area>();
 		for(Area area :listAll){
@@ -76,9 +78,9 @@ public class UserinfoServiceiml implements UserinfoService {
 
 	@Override
 	public List<TreeNode> getAreaTree2() {
-		Object obj = redisService.get("AreaTree");
+		TreeNode obj = (TreeNode) redisService.get("AreaTree",TreeNode.class);
 		if(obj!=null)
-			return ((TreeNode)obj).getChildren();
+			return obj.getChildren();
 		TreeNode node = new TreeNode();
 		node.setId("0");
 		node.setState("closed");

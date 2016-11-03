@@ -174,7 +174,7 @@
   	where u.username = #{username} 
   </select>
   
-  <select id='list' parameterType="PageEntity" resultMap="RelateMap" useCache="false">
+  <select id='list' parameterType="PageEntity" resultMap="RelateMap"  useCache="false"><!--  -->
   		select u.*,a.*,i.*,s.*from zih_user u
   		left join zih_account a on u.username = a.username 
   		left join zih_userinfo i on u.username = i.username

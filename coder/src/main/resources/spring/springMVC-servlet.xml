@@ -14,13 +14,11 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
-	<context:component-scan base-package="com.zihai.controller">
+	 <context:component-scan base-package="com.zihai.controller">
  			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-<!-- 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" /> -->
- 	</context:component-scan>
- 	 <!-- 启动SpringMVC的注解功能，它会自动注册HandlerMapping、 HandlerAdapter、ExceptionResolver的相关实例 
- 	 并注册converter问题-->
- 	 <mvc:annotation-driven />  	
+			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+ 	</context:component-scan> 
+ 	
 	  <!-- <bean class="org.springframework.http.converter.ResourceHttpMessageConverter" /> 
 	  <bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >  
 	       <property name="supportedMediaTypes">  
@@ -107,4 +105,7 @@
 	        </array>
 	    </property>
 	</bean>
+		 <!-- 启动SpringMVC的注解功能，它会自动注册HandlerMapping、 HandlerAdapter、ExceptionResolver的相关实例 
+ 	 并注册converter问题-->
+ 	 <mvc:annotation-driven />  
 </beans>

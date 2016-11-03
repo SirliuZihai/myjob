@@ -3,25 +3,25 @@ package com.zihai.common;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.annotation.Resource;
+
 import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.ContextLoaderListener;
 
+import com.zihai.util.RedisUtil;
 
 public class RedisCache implements Cache{
 	private  Logger logger = LoggerFactory.getLogger(RedisCache.class);
-	
-	private static ClassPathXmlApplicationContext wac = new ClassPathXmlApplicationContext("spring/spring-redis.xml");
-	
-	private RedisTemplate<Object, Object> redisTemplate=(RedisTemplate<Object, Object>) wac.getBean("redisTemplate");
-	
-	
+
 	private final String id;
 	
 	/**
@@ -36,7 +36,6 @@ public class RedisCache implements Cache{
         logger.debug("MybatisRedisCache:id=" + id);
         this.id = id;
     }
-	
 
 	@Override
 	public String getId() {
@@ -45,35 +44,29 @@ public class RedisCache implements Cache{
 
 	@Override
 	public void putObject(Object key, Object value) {
-		redisTemplate.opsForValue().set(key, value);;
+		RedisUtil.add(key, value);
 		
 	}
 
 	@Override
 	public Object getObject(Object key) {
-		if(redisTemplate==null)logger.info("redisTemplate is not injected");
-		return redisTemplate.opsForValue().get(key);
+		return RedisUtil.get(key);
 	}
 
 	@Override
 	public Object removeObject(Object key) {
-		redisTemplate.delete(key);
+		 RedisUtil.delete(key);
 		return null;
 	}
 
 	@Override
 	public void clear() {
-		RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
-		RedisConnection connection = factory.getConnection();
-		connection.flushDb();
-		connection.flushAll();
+		 RedisUtil.clear();
 	}
 
 	@Override
 	public int getSize() {
-		RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
-		RedisConnection connection = factory.getConnection();
-		return Integer.valueOf(connection.dbSize().toString());
+		return RedisUtil.getSize();
 	}
 
 	@Override

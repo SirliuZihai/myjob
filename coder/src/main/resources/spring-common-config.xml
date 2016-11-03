@@ -10,16 +10,18 @@
                 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd">
 
 
-	<context:annotation-config/>
+	
 	
 	<!-- 导入外部的properties文件 -->
-	<context:property-placeholder location="classpath*:property/*.properties" ignore-unresolvable="true"></context:property-placeholder>
+<!-- 	<context:property-placeholder location="classpath*:property/*.properties" ignore-unresolvable="true"></context:property-placeholder> -->
 	
 	<import resource="classpath:spring/bean-spring.xml" />
+	 <import resource="classpath:spring/spring-redis.xml" />
 	 <import resource="classpath:spring/spring-mybatis.xml" />
-	  <import resource="classpath:spring/spring-redis.xml" />
+	 
 	<!-- <import resource="classpath:spring/quartz-bean.xml" /> -->
 	
 	<!-- 自动扫描与装配bean -->
 	<context:component-scan base-package="com.zihai"></context:component-scan>
+	<context:annotation-config/>
 </beans>
