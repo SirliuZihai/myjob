@@ -1,10 +1,16 @@
 package com.zihai.entity;
 
+import java.util.ArrayList;
+
 public class PageEntity<T> {
 	private int pageSize;
 	private int pageNum;
 	private int start;
 	private T entity;
+	/**
+	 * 用于in()
+	 * */
+	private ArrayList<String> items;
 	
 	public PageEntity(int pageSize, int pageNum, T entity) {
 		this.pageNum = pageNum;
@@ -44,6 +50,15 @@ public class PageEntity<T> {
 	public void setEntity(T entity) {
 		this.entity = entity;
 	}
+
+	public ArrayList<String> getItems() {
+		return items;
+	}
+
+	public void setItems(ArrayList<String> items) {
+		this.items = items;
+	}
+
 
 	
 }

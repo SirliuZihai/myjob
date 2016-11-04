@@ -15,8 +15,10 @@ public class MethedTest {
 	}
 	
 	public static void main(String[] args) {
-		
-		System.out.println("".length());
+		StringBuffer str = new StringBuffer("");
+		str.delete(0,str.length()-1);
+		System.out.println(str.toString());
+		System.out.println(str.length());
 
 	}
 

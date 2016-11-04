@@ -1,10 +1,13 @@
 package com.zihai.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Account {
-    private String username;
+public class Account implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private String username;
 
     private BigDecimal money;
 

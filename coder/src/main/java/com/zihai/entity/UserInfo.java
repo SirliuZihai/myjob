@@ -1,9 +1,12 @@
 package com.zihai.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserInfo {
-    private String username;
+public class UserInfo implements Serializable{
+	private static final long serialVersionUID = 1L;
+
+	private String username;
 
     private String name;
     

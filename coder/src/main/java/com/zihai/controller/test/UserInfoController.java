@@ -34,6 +34,8 @@ public class UserInfoController {
 	@RequestMapping("/list.do")
 	@ResponseBody
 	public Page<User> list(int page,int rows,User user){
+		if(user.getUserinfo()!=null)
+			System.out.println(user.getUserinfo().getName()+" "+user.getUserinfo().getSex()+" "+user.getUserinfo().getArea());
 		return service.list(rows, page, user);
 	}
 	

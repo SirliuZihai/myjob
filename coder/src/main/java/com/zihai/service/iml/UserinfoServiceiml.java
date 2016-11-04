@@ -1,9 +1,13 @@
 package com.zihai.service.iml;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.zihai.common.Page;
 import com.zihai.common.TreeNode;
 import com.zihai.dao.AreaDao;
@@ -28,15 +33,49 @@ public class UserinfoServiceiml implements UserinfoService {
 	@Autowired
 	private AreaDao areaDao;
 	@Autowired
-	private RedisService<String,Object> redisService;
-	
+	private RedisService redisService ;	
 	
 	@Override
 	public Page<User> list(int pageSize, int Pagenum,User user) {
-		List<User> list = dao.list(new PageEntity<User>(pageSize,Pagenum,user));
-		return new Page<User>(dao.count(user), list);
+		HashMap<String,Area> map =getAreaMap();//从缓存读取地区Map
+		Deque<String> query = new LinkedList<String>();//名称队列
+		StringBuffer buffer = new StringBuffer();//缓存地区名称
+		Area area;//地区类
+		String str;//地区串
+		String id = null;//地区id
+		//加入地区IN的查询条件
+		PageEntity<User> page = new PageEntity<User>(pageSize,Pagenum,user);
+		if(user!=null&&user.getUserinfo()!=null&&StringUtils.isNotEmpty(id= user.getUserinfo().getArea())){
+			TreeNode node = new TreeNode();
+			node.setId(id);
+			node.setChildren(getAreaTree(id));
+			ArrayList<String> arr = new ArrayList<String>();
+			getChildrenId(arr,node);
+			page.setItems(arr);//加入条件
+		}
+		
+		List<User> list = dao.list(page);//select
+		
+		//重写Areaname，通过递归（id->parentid->areaname）获得全称。
+		for(User u :list){		
+			id = u.getUserinfo().getAreainfo().getId();
+			while(StringUtils.isNotEmpty(id)&&!"0".equals(id)){
+				area =  map.get(id);
+				query.addFirst(area.getAreaname());
+				id = area.getParentid();
+			}			
+			while((str=query.poll()) != null){
+				buffer.append(str+" ");
+			}
+			u.getUserinfo().getAreainfo().setAreaname(buffer.toString());
+			query.clear();//清空队列
+			buffer.delete(0, buffer.length());//清空
+		}
+		return new Page<User>(dao.count(page), list);//性能考虑，不返回总条数
 	}
-
+	/**
+	 * 获得子树
+	 * */
 	@Override
 	public List<TreeNode> getAreaTree(String id) {
 		if(StringUtils.isEmpty(id))
@@ -64,9 +103,9 @@ public class UserinfoServiceiml implements UserinfoService {
 	 */
 	@Override
 	public HashMap<String , Area> getAreaMap(){
-		Object obj = redisService.get("AreaMap",HashMap.class);
+		HashMap<String, Area> obj =  JSON.parseObject(redisService.get("AreaMap"), new TypeReference<HashMap<String, Area>>(){});
 		if(obj!=null)
-			return (HashMap<String, Area>) obj;
+			return obj;
 		List<Area> listAll = areaDao.selectAll();//取出所有地区
 		HashMap<String,Area> areaMap = new HashMap<String,Area>();
 		for(Area area :listAll){
@@ -78,14 +117,14 @@ public class UserinfoServiceiml implements UserinfoService {
 
 	@Override
 	public List<TreeNode> getAreaTree2() {
-		TreeNode obj = (TreeNode) redisService.get("AreaTree",TreeNode.class);
+		TreeNode obj = JSON.parseObject(redisService.get("AreaTree"), TreeNode.class);
 		if(obj!=null)
 			return obj.getChildren();
 		TreeNode node = new TreeNode();
 		node.setId("0");
 		node.setState("closed");
 		node.setText("中国");
-		HashMap<String,Area> map = (HashMap<String, Area>) ((HashMap<String, Area>)getAreaMap()).clone();
+		HashMap<String,Area> map = (HashMap<String, Area>) getAreaMap().clone();
 		insertNode(map,node);
 		redisService.add("AreaTree", node);
 		return node.getChildren();
@@ -117,5 +156,27 @@ public class UserinfoServiceiml implements UserinfoService {
 			insertNode(areas,node3);
 		}
 	}
-	
+	/**
+	 * childrenId -> arr
+	 * */
+	private void getChildrenId(ArrayList<String> arr,TreeNode node){
+		arr.add(node.getId());
+		if(node.getChildren()!=null)
+		for(TreeNode node_temp:node.getChildren()){
+			getChildrenId(arr,node_temp);
+		}
+	}
+	/**
+	 * used for sql in()
+	 * */
+	private String formateArray(ArrayList<String> arr,String split){
+		Iterator<String> it = arr.iterator();
+		StringBuffer buf = new StringBuffer();
+		while(it.hasNext()){
+			buf.append(it.next()+split);
+		}
+		if(buf.length()>=split.length())return buf.substring(0, buf.length()-split.length());
+		return null ;
+		
+	}
 }

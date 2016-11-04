@@ -18,25 +18,25 @@
 	    				<label>姓名:</label>
 	    			</td>
 	    			<td >
-	    				<input name="name" class="easyui-textbox" data-options="prompt: '姓名'">
+	    				<input name="userinfo.name" class="easyui-textbox" data-options="prompt: '姓名'">
 	    			</td>
 	    			<td style="width:90px;text-align: right;padding-right: 20px;" >
 	    				<label>性别:</label>
 	    			</td>
 	    			<td >
-	    				<input name="sex" class="easyui-textbox" data-options="prompt: '性别'">
+	    				<input name="userinfo.sex" id="sex" class="easyui-textbox" data-options="prompt: '性别'">
 	    			</td>
 	    			<td style="width:90px;text-align: right;padding-right: 20px;" >
 	    				<label>地区:</label>
 	    			</td>
 	    			<td >
-	    				<input  name="area" id="area" class="easyui-textbox" data-options="prompt: '地区'">
+	    				<input  name="userinfo.area" id="area" class="easyui-textbox" data-options="prompt: '地区'">
 	    			</td>
 	    			<td style="width:90px;text-align: right;padding-right: 20px;" >
 	    				<label>积分:</label>
 	    			</td>
 	    			<td >
-	    				<input name="credit"  class="easyui-combobox" data-options="prompt: '积分'">
+	    				<input name="account.credit"  class="easyui-textbox" data-options="prompt: '积分'">
 	    			</td>
 	    		</tr>
 	    		<tr>
@@ -101,6 +101,18 @@ $(function(){
 	  // data: eval("TreeNode="+TreeNode)
 
 	}); 
+	$("#sex").combobox({
+    	editable:false,
+        valueField:'value',
+		textField:'label',
+		data: [{
+			label: '男',
+			value: '男'
+		},{
+			label: '女',
+			value: '女'
+		}]
+    });
 	
 	
 });

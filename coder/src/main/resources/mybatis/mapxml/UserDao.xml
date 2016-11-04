@@ -175,13 +175,50 @@
   </select>
   
   <select id='list' parameterType="PageEntity" resultMap="RelateMap"  useCache="false"><!--  -->
-  		select u.*,a.*,i.*,s.*from zih_user u
+  		select u.*,a.*,i.*,s.* from zih_user u
   		left join zih_account a on u.username = a.username 
   		left join zih_userinfo i on u.username = i.username
   		left join areas s on i.area = s.id
+  		<where>
+	  		<if test="entity.userinfo != null">
+	  			<if test="entity.userinfo.sex != null and entity.userinfo.sex != '' ">
+		    		i.sex = #{entity.userinfo.sex} 
+		   		 </if>
+		  		<if test="entity.userinfo.area != null and entity.userinfo.area != '' ">
+		    		and i.area in
+		    		<foreach item="item" index="index" collection="items" open="(" separator="," close=")">
+					        #{item}
+					 </foreach>
+		   		 </if>
+		  		 <if test="entity.userinfo.name != null and entity.userinfo.name != '' ">
+		  			<bind name="name" value="entity.getUserinfo().getName() + '%'"/> 
+		    		and i.name like #{name} 
+		   		 </if>
+	   		 </if>
+   		 </where>
   		limit #{start},#{pageSize}
   </select>
-  <select id="count" parameterType="User" resultType="int">
-  		select count(*) from zih_user
+  <select id="count" parameterType="User" resultType="int" useCache="false" fetchSize="256">
+  			select count(1) from zih_user u
+  		left join zih_account a on u.username = a.username 
+  		left join zih_userinfo i on u.username = i.username
+  		left join areas s on i.area = s.id
+  		<where>
+	  		<if test="entity.userinfo != null">
+	  			<if test="entity.userinfo.sex != null and entity.userinfo.sex != '' ">
+		    		i.sex = #{entity.userinfo.sex} 
+		   		 </if>
+		  		<if test="entity.userinfo.area != null and entity.userinfo.area != '' ">
+		    		and i.area in 
+		    		<foreach item="item" index="index" collection="items" open="(" separator="," close=")">
+					        #{item}
+					 </foreach>
+		   		 </if>
+		  		 <if test="entity.userinfo.name != null and entity.userinfo.name != '' ">
+		  			<bind name="name" value="entity.getUserinfo().getName() + '%'"/> 
+		    		and i.name like #{name} 
+		   		 </if>
+	   		 </if>
+   		 </where>
   </select>
 </mapper>

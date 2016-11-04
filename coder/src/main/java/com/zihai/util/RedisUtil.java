@@ -1,20 +1,13 @@
 package com.zihai.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
-import redis.clients.jedis.Jedis;
 
 
 public class RedisUtil {
@@ -37,7 +30,7 @@ public class RedisUtil {
 			}
 		},true);
 	}
-	public static Object get(Object key ,Class<? extends Object>...type){
+	public static Object get(Object key){
 		//if(redisTemplate==null)logger.info("redisTemplate is not injected");
 		return redisTemplate.execute(new RedisCallback<Object>() {
 			@Override
@@ -45,9 +38,7 @@ public class RedisUtil {
 				byte[] b  = JSON.toJSONBytes(key);
 				if(connection.exists(b)==false)
 					return null;
-				if(type.length==0)
-					return JSON.parse(connection.get(b));
-				return JSON.parseObject(connection.get(b),type[0]);
+				return JSON.parse(connection.get(b));
 			}
 		},true);
 	}
@@ -61,5 +52,19 @@ public class RedisUtil {
 		RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
 		RedisConnection connection = factory.getConnection();
 		return Integer.valueOf(connection.dbSize().toString());
+	}
+	/**
+	 * return jsonString,用于转换javaObject
+	 * */
+	public static String get2String(Object key){
+		return redisTemplate.execute(new RedisCallback<String>() {
+			@Override
+			public String doInRedis(RedisConnection connection) throws DataAccessException {
+				byte[] b  = JSON.toJSONBytes(key);
+				if(connection.exists(b)==false)
+					return null;
+				return JSON.toJSONString(JSON.parse(connection.get(b)));
+			}
+		},true);
 	}
 }

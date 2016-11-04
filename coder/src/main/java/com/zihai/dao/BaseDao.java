@@ -18,7 +18,7 @@ public interface BaseDao<T> {
 
     int updateByPrimaryKey(T entity);
     
-    public List<T> list(PageEntity pe);
+    public List<T> list(PageEntity<T> pe);
     
-    public int count(T entity);
+    public int count(PageEntity<T> entity);
 }

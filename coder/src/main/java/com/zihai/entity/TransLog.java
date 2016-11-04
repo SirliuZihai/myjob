@@ -1,10 +1,14 @@
 package com.zihai.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TransLog {
-    private String transId;
+public class TransLog implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
+	private String transId;
 
     private String userFrom;
 
