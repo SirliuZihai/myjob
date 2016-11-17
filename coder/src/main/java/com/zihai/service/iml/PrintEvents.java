@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.zihai.dao.AccountDao;
@@ -23,8 +25,6 @@ public class PrintEvents implements PrintService {
 	@Autowired
 	private UserDao dao;
 	@Autowired
-	private UserInfoDao infodao;
-	@Autowired
 	private AccountDao accountDao;
 	
 	public void print(String name) {
@@ -40,39 +40,13 @@ public class PrintEvents implements PrintService {
 
 	}
 	
-
-	@Override
-	public void insertTest(int num) {
-		User user = new User();
-		UserInfo info = new UserInfo();
-		Account account = new Account();
-		for(int i=0;i<num;i++){
-			try {
-				user.setUsername(RanddomDateUtil.randEnglish());
-				user.setEmail(RanddomDateUtil.getEmail(3, 9));
-				user.setPassword(UUID.randomUUID().toString());
-				user.setPhone(RanddomDateUtil.getTel());
-				user.setMakedatetime(new Date());
-				dao.insertSelective(user);
-			} catch (Exception e) {
-				System.out.println(user.getUsername()+"重复了");
-				continue;
-			}
-			info.setAddress(RanddomDateUtil.getRoad());
-			info.setUsername(user.getUsername());
-			info.setCountry("Chinese");
-			info.setName(RanddomDateUtil.getChineseName());
-			info.setSex(RanddomDateUtil.name_sex);
-			infodao.insertSelective(info);
-			account.setCredit("1");
-			account.setUsername(user.getUsername());
-			account.setMoney(new BigDecimal(RanddomDateUtil.getNum(0,9999999)).movePointLeft(2));
-			account.setModifydate(new Date());
-			accountDao.insertSelective(account);
-			System.out.println("成功插入一条数据");
-
-		}
-		
+	@Cacheable(value="money",key="#name+'_money'")
+	public String getMoney(String name){
+		return String.valueOf(accountDao.selectByPrimaryKey(name).getMoney());
 	}
 	
+	@CacheEvict(key="#name+'_money'",cacheNames="money")
+	public void cleanCache(String name){
+		
+	}
 }

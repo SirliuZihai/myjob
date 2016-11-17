@@ -31,20 +31,23 @@ public class HellowWorld  {
 	@Autowired
 	private TransLogDao transLogDao;
 	
-	@RequestMapping("/world")
+	@RequestMapping("/world.do")
 	public String hellow(String name,Model model){
 		log.info("the name:"+name);
 		print.print(name);
-		//print.insertTest(num);
+		
 		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";
 	}
-	@RequestMapping("/insert")
+	@RequestMapping("/getMoney.do")
 	@ResponseBody
-	public String insert(int num){
-		print.insertTest(num);
-		//print.insertTest(num);
-		return "OK";
+	public String getMoney(String name,Boolean clean){
+		if(clean !=null && clean == true){
+			print.cleanCache(name);
+			return "cleaned";
+		}
+		
+		return print.getMoney(name);
 	}
 	@RequestMapping("/trandshow.do")
 	public String trandshow(String name,Model model){

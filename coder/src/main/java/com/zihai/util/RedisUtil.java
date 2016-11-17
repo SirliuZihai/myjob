@@ -1,4 +1,4 @@
-package com.zihai.util;
+/*package com.zihai.util;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
@@ -6,12 +6,12 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
-
 public class RedisUtil {
-	private static ClassPathXmlApplicationContext wac = new ClassPathXmlApplicationContext("spring/spring-redis.xml");
+	public static ClassPathXmlApplicationContext wac = new ClassPathXmlApplicationContext("spring/spring-redis.xml");
 	private static RedisTemplate<Object, Object> redisTemplate=(RedisTemplate<Object, Object>) wac.getBean("redisTemplate");
 	
 	public static Boolean add(Object key,Object value){
@@ -53,9 +53,9 @@ public class RedisUtil {
 		RedisConnection connection = factory.getConnection();
 		return Integer.valueOf(connection.dbSize().toString());
 	}
-	/**
+	*//**
 	 * return jsonString,用于转换javaObject
-	 * */
+	 * *//*
 	public static String get2String(Object key){
 		return redisTemplate.execute(new RedisCallback<String>() {
 			@Override
@@ -68,3 +68,4 @@ public class RedisUtil {
 		},true);
 	}
 }
+*/

@@ -1,4 +1,4 @@
-package com.zihai.common;
+/*package com.zihai.common;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -24,9 +24,9 @@ public class RedisCache implements Cache{
 
 	private final String id;
 	
-	/**
+	*//**
      * The {@code ReadWriteLock}.
-     */
+     *//*
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
     public RedisCache(final String id) {
@@ -75,3 +75,4 @@ public class RedisCache implements Cache{
 	}
 
 }
+*/

@@ -117,26 +117,24 @@ $(function(){
 	
 });
 
-function getName(row){
-	return row!=null?row[userinfo][name]:"";
-}
-function getAddress(value){
-	return value!=null?value.address:"";
-}
 //搜索
 function serach(){
 	var params = {};
 	$('#serachFrom').find('input').each(function(){
         var obj = $(this);
         var name = obj.attr('name');
-        if(name){
+        if(name != undefined&&name != "" && obj.val() !=""){
+        	alert(obj.val());
             params[name] = obj.val();
         }
     });
 	console.log(params);
 	$('#dg').datagrid("load", params);
 }
-
+//重置
+function reset(){
+	$('#serachFrom').form("clear");
+}
 </script>
     </body>
 </html>

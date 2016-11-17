@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -71,7 +72,18 @@ public class UserinfoServiceiml implements UserinfoService {
 			query.clear();//清空队列
 			buffer.delete(0, buffer.length());//清空
 		}
-		return new Page<User>(dao.count(page), list);//性能考虑，不返回总条数
+		Integer count = null;
+		
+		if(user!=null&&user.getUserinfo()!=null)
+			count = dao.count(page);
+		if(count==null)
+			count = JSON.parseObject(redisService.get2String("userinfoCountAll"), Integer.class);
+		if(count==null){
+			count = dao.count(page);
+			redisService.add("userinfoCountAll", count);
+		}
+			
+		return new Page<User>(count, list);//性能考虑，不返回总条数
 	}
 	/**
 	 * 获得子树
@@ -103,7 +115,7 @@ public class UserinfoServiceiml implements UserinfoService {
 	 */
 	@Override
 	public HashMap<String , Area> getAreaMap(){
-		HashMap<String, Area> obj =  JSON.parseObject(redisService.get("AreaMap"), new TypeReference<HashMap<String, Area>>(){});
+		HashMap<String, Area> obj =  JSON.parseObject(redisService.get2String("AreaMap"), new TypeReference<HashMap<String, Area>>(){});
 		if(obj!=null)
 			return obj;
 		List<Area> listAll = areaDao.selectAll();//取出所有地区
@@ -114,10 +126,11 @@ public class UserinfoServiceiml implements UserinfoService {
 		redisService.add("AreaMap", areaMap);
 		return areaMap;
 	}
-
+	
+	//@Cacheable(value="listAreaTree",key="")
 	@Override
 	public List<TreeNode> getAreaTree2() {
-		TreeNode obj = JSON.parseObject(redisService.get("AreaTree"), TreeNode.class);
+		TreeNode obj = JSON.parseObject(redisService.get2String("AreaTree"), TreeNode.class);
 		if(obj!=null)
 			return obj.getChildren();
 		TreeNode node = new TreeNode();

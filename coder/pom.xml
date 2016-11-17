@@ -60,6 +60,11 @@
 	    <artifactId>jedis</artifactId>
 	    <version>2.9.0</version>
 	</dependency>
+<!-- 	<dependency>
+	    <groupId>org.apache.archiva.redback.components.cache</groupId>
+	    <artifactId>spring-cache-api</artifactId>
+	    <version>2.2</version>
+	</dependency> -->
 	<dependency>
 	 <groupId>javax.servlet</groupId>
 		<artifactId>jstl</artifactId>
@@ -152,6 +157,19 @@
 	    <artifactId>slf4j-log4j12</artifactId>
 	    <version>1.7.21</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aspects</artifactId>
+	    <version>4.3.2.RELEASE</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+	<!-- <dependency>
+	    <groupId>org.aspectj</groupId>
+	    <artifactId>aspectjrt</artifactId>
+	    <version>1.8.9</version>
+	</dependency> -->
 	
 	
      

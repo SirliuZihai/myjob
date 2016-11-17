@@ -1,51 +1,73 @@
 package com.zihai.service.iml;
 
-import javax.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.zihai.service.RedisService;
-import com.zihai.util.RedisUtil;
-
 
 @Service
 public class RedisServiceiml implements RedisService {
-	private  Logger logger = LoggerFactory.getLogger(RedisServiceiml.class);
-
-	//@Autowired
-	//private RedisTemplate<String, V> redisTemplate ;
-
+	@Autowired
+	private  RedisTemplate<String, Object> redisTemplate;
 	
-	@PostConstruct
-	public void init() {
-    }
-		
-	@Override
-	public boolean add(String key, Object value) {
-		//redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer(value.getClass()));
-		//boolean bool = redisTemplate.opsForValue().setIfAbsent(key, value);
-		long time = System.currentTimeMillis();
-		Boolean bool = RedisUtil.add(key, value);
-		long time1 = System.currentTimeMillis()-time;
-		if(bool ==true)logger.info("add the key:"+key+"and time use :"+time1);
-		return bool;
+	public  Boolean add(String key,Object value){
+		return redisTemplate.execute( new RedisCallback<Boolean>(){
+			@Override
+			public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+				return connection.setNX(JSON.toJSONBytes(key), JSON.toJSONBytes(value));
+			}
+		},true);
 	}
-	
+	public  Boolean delete(String key){
+		return redisTemplate.execute( new RedisCallback<Boolean>(){
+			@Override
+			public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+				return connection.del(JSON.toJSONBytes(key))>0;
+			}
+		},true);
+	}
+	public  Object get(String key){
+		//if(redisTemplate==null)logger.info("redisTemplate is not injected");
+		return redisTemplate.execute(new RedisCallback<Object>() {
+			@Override
+			public Object doInRedis(RedisConnection connection) throws DataAccessException {
+				byte[] b  = JSON.toJSONBytes(key);
+				if(connection.exists(b)==false)
+					return null;
+				return JSON.parse(connection.get(b));
+			}
+		},true);
+	}
+	public  void clear() {
+		RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
+		RedisConnection connection = factory.getConnection();
+		connection.flushDb();
+		connection.flushAll();
+	}
+	public  int getSize() {
+		RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
+		RedisConnection connection = factory.getConnection();
+		return Integer.valueOf(connection.dbSize().toString());
+	}
 	/**
-	 * return jsonString
+	 * return jsonString,用于转换javaObject
 	 * */
-	@Override
-	public String get(String key) {
-	//	V v = redisTemplate.opsForValue().get(key);
-		long time = System.currentTimeMillis();
-		String v =  RedisUtil.get2String(key);
-		long time1 = System.currentTimeMillis()-time;
-		if(v!=null)
-			logger.info("hit the key"+key+"and time use :"+time1);
-		return v ;
+	public  String get2String(String key){
+		return redisTemplate.execute(new RedisCallback<String>() {
+			@Override
+			public String doInRedis(RedisConnection connection) throws DataAccessException {
+				byte[] b  = JSON.toJSONBytes(key);
+				if(connection.exists(b)==false)
+					return null;
+				return JSON.toJSONString(JSON.parse(connection.get(b)));
+			}
+		},true);
 	}
-
-
 }

@@ -4,15 +4,23 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:c="http://www.springframework.org/schema/c"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
-               http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+               http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+               http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd " >
 
 	<context:property-placeholder location="classpath:property/redis.properties" ignore-unresolvable="true"></context:property-placeholder>
-
+	
+	<!-- 配置Spring-cache -->
+	<cache:annotation-driven cache-manager="cacheManager" /> 
+	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager" c:redisOperations-ref="redisTemplate" /><!--  -->
+	 
+	<!--  <bean class="org.springframework.cache.interceptor.CacheResolver"/> -->
+	
 	 <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig" >
 	 	 <property name="maxIdle" value="1" /><!-- 最大空闲连接数 -->
         <property name="maxTotal" value="3" /><!-- 最大连接数-->
@@ -30,10 +38,11 @@
       
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
         <property name="connectionFactory"   ref="connectionFactory" />
+        <property name="keySerializer"><bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/></property>
         <!-- 序列化方式 建议key/hashKey采用StringRedisSerializer。 --> 
-         <!-- <property name="valueSerializer">  
+         <property name="valueSerializer">  
             <bean  class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />  
-        </property>  -->
+        </property> 
     </bean>
     <!-- 
       <bean id="sentinelConfig"
@@ -57,4 +66,7 @@
         </property>
     </bean>
 	 -->
+
+	 
+	
 </beans>

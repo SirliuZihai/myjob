@@ -15,9 +15,6 @@
     <include refid="Base_Column_List" />
     from zih_account
     where username = #{username,jdbcType=VARCHAR}
-    <if test="isUpdate != null and isUpdate == true">
-        for update
-    </if>
   </select>
    <select id="selectByPrimaryKeyForUpdate" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
