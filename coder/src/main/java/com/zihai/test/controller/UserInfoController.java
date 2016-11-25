@@ -1,10 +1,11 @@
-package com.zihai.controller.test;
+package com.zihai.test.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,10 +34,15 @@ public class UserInfoController {
 	
 	@RequestMapping("/list.do")
 	@ResponseBody
-	public Page<User> list(int page,int rows,User user){
+	public Callable<Page<User>> list(int page,int rows,User user){
 		if(user.getUserinfo()!=null)
 			System.out.println(user.getUserinfo().getName()+" "+user.getUserinfo().getSex()+" "+user.getUserinfo().getArea());
-		return service.list(rows, page, user);
+		return new Callable<Page<User>>(){
+			public Page<User> call(){
+				return service.list(rows, page, user);
+			}
+			
+		};
 	}
 	
 	@RequestMapping("/areaAll.do")
@@ -50,6 +56,5 @@ public class UserInfoController {
 	public List<TreeNode> areaAll2(){
 		return service.getAreaTree2();
 	}
-	
 	
 }

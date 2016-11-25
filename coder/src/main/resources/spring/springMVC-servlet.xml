@@ -7,14 +7,16 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd" >
 	
-	 <context:component-scan base-package="com.zihai.controller">
+	 <context:component-scan base-package="com.zihai.*.controller">
  			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
  	</context:component-scan> 
@@ -37,8 +39,11 @@
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter ">
 		<property name="messageConverters">
 			<list>
-			    <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/><!-- 解析导出文件byte流 --> 
+				<bean class = "org.springframework.http.converter.StringHttpMessageConverter">
+	                <property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />
+	            </bean>
 			      <ref bean="fastJsonHttpMessageConverter" />
+			       <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/><!-- 解析导出文件byte流 --> 
 				 <!-- <ref bean="mappingJackson2HttpMessageConverter" />  -->
 			</list>
 		</property>
@@ -105,7 +110,26 @@
 	        </array>
 	    </property>
 	</bean>
+	<!-- 处理异常 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.AuthorizationException">shiro/noAuth</prop>
+            </props>
+        </property>
+    </bean>
 		 <!-- 启动SpringMVC的注解功能，它会自动注册HandlerMapping、 HandlerAdapter、ExceptionResolver的相关实例 
  	 并注册converter问题-->
- 	 <mvc:annotation-driven />  
+ 	 <mvc:annotation-driven ><mvc:async-support default-timeout="10000"/></mvc:annotation-driven>  
+ 	 <!-- 解决shiro注释aop调用，控制controller方法级别 ；==以下配置-->
+ 	 <!-- <aop:config proxy-target-class="true"/> -->
+ 	 
+ 	 <!-- Enable Shiro Annotations for Spring-configured beans.  Only run after he lifecycleBeanProcessor has run:-->
+	 <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true"/>
+	</bean>
+	
+	
+		<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	
 </beans>

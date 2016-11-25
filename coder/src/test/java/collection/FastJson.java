@@ -10,7 +10,6 @@ import com.zihai.common.TreeNode;
 import com.zihai.entity.Area;
 import com.zihai.service.RedisService;
 import com.zihai.service.iml.RedisServiceiml;
-import com.zihai.util.RedisUtil;
 
 public class FastJson {
 

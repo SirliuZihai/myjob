@@ -1,7 +1,6 @@
-package com.zihai.controller.test;
+package com.zihai.test.controller;
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -39,7 +38,7 @@ public class HellowWorld  {
 		model.addAttribute("username", "gook luc1s 先生"+name);
 		return "test/hellow";
 	}
-	@RequestMapping("/getMoney.do")
+	@RequestMapping(value="/getMoney.do")
 	@ResponseBody
 	public String getMoney(String name,Boolean clean){
 		if(clean !=null && clean == true){

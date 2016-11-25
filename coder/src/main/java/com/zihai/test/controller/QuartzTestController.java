@@ -1,4 +1,4 @@
-package com.zihai.controller.test;
+package com.zihai.test.controller;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
