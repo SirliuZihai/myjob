@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="../../css/easyui/themes/default/easyui.css" >
+	<link rel="stylesheet" type="text/css" href="../../css/easyui/themes/icon.css" >
+	<script type="text/javascript" src="../../js/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="../../js/lib/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../js/util/easyuiUtil.js"></script>
+</head>
+<body>
+	<input id="test" class="easyui-datebox"/>
+	<input id="test2" class="easyui-combobox" data-options="valueField: 'VALUE',textField: 'LABEL',data:statu_arr4"/>
+	<input id="test_text" class="easyui-textbox"/>
+	<button onclick="dis();">dis</button>
+	<button onclick="ena();">ena</button>
+	<button onclick="req();">req</button>
+	<button onclick="disreq();">disreq</button>
+	<button onclick="alertsomething();">alertsomething</button>
+	
+<script type="text/javascript">
+var statu_arr4 = [{'LABEL': '是','VALUE': '1'},{'LABEL': '否','VALUE': '0'}];
+$(function(){
+	 $('#test').datebox('calendar').calendar({
+		validator: function(date){
+			var now = new Date();
+			return date>now;
+		}
+	}); 
+});
+function dis(){
+//	easyui_disabled($('#test_text'),true,'textbox');
+	$('#test2').combobox({disabled:true});
+}
+function ena(){
+	//easyui_disabled($('#test_text'),false,'textbox');
+	$('#test2').combobox({disabled:false});
+}
+function req(){
+	$('#test2').combobox({required:true});
+	$('#test_text').textbox(({required:true}));
+}
+function disreq(){
+	$('#test2').combobox({required:false});
+	$('#test_text').textbox(({required:false}));
+}
+$.fn.datebox.defaults.formatter = function(date){
+	if(date==null)return "";
+ 	var y = date.getFullYear();
+ 	var m = date.getMonth()+1;
+ 	var d = date.getDate();
+ 	return y+'/'+m+'/'+d;
+ }
+ $.fn.datebox.defaults.parser=function(s){
+	 if(s=="1970/1/1")return null;
+ 	  var t = Date.parse(s);  
+ 	  if (!isNaN(t)){  
+ 	   return new Date(t);  
+ 	  } else {  
+ 	   return new Date();  
+ 	  }  
+ }
+/* 			var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+var d2 = new Date(now.getFullYear(), now.getMonth(), now.getDate()+10); */
+</script>
+</body>
+</html>
