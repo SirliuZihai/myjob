@@ -1,7 +1,10 @@
 package com.zihai.test.controller;
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -10,11 +13,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONArray;
+import com.zihai.common.Result;
 import com.zihai.dao.TransLogDao;
+import com.zihai.entity.Account;
 import com.zihai.entity.TransLog;
+import com.zihai.entity.User;
+import com.zihai.entity.UserModel;
 import com.zihai.service.PrintService;
 import com.zihai.service.TransService;
 import com.zihai.websocket.util.SessionUtils;
@@ -88,5 +98,59 @@ public class HellowWorld  {
 	 throw new NullPointerException(SessionUtils.getKey(relationId, userCode) +"Connection does not exist");
 	}
 
+	}
+	
+	@RequestMapping("/getForm.do")
+	@ResponseBody
+	public Result getForm(UserModel users,MultipartFile[] files){
+		System.out.println(users.getOneleveltest());
+		if(users.getUsers() == null) return new Result(true,"无任何数据");
+		for(User u :users.getUsers()){
+			System.out.println(u.getUsername()+" "+u.getMakedatetime());
+			if(!ObjectUtils.isEmpty(u.getAccount()))System.out.println(u.getAccount().getCredit());
+		}
+		if(files !=null){
+			for(int i=0;i<files.length;i++)
+				System.out.println("thi "+i+"个"+files[i].getOriginalFilename());
+
+		}
+		return new Result(true," ok !");
+	}
+	@RequestMapping("/inform.do")
+	@ResponseBody
+	public UserModel inForm(){
+		List<User> list = new ArrayList<User>();
+		User u = new User();
+		u.setUsername("刘先生");
+		u.setMakedatetime(new Date());
+		User u2 = new User();
+		u2.setUsername("liu");
+		u2.setAuth("1");
+		Account a = new Account();
+		a.setCredit("123");
+		u2.setMakedatetime(new Date());
+		u2.setAccount(a);
+		list.add(u);
+		list.add(u2);
+		UserModel m = new UserModel();
+		m.setUsers(list);
+		m.setOneleveltest("good");
+		return m;
+	}
+	@RequestMapping("/inform2.do")
+	@ResponseBody
+	public User inForm2(){
+		User u = new User();
+		u.setUsername("刘曾任之");
+		Account a = new Account();
+		a.setCredit("123");
+		u.setAccount(a);
+		return u;
+	}
+	@RequestMapping("formtest.do")
+	public String formtest(Model model){
+		model.addAttribute("users",inForm());
+		model.addAttribute("userjson",JSONArray.toJSONString(inForm()));
+		return "/easyuitest/formtest";
 	}
 }

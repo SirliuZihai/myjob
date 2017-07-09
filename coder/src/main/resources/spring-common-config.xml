@@ -21,6 +21,7 @@
 	 <import resource="classpath:spring/spring-mybatis.xml" />
 	 <import resource="classpath:spring/spring-redis.xml"/>
 	 <import resource="classpath:spring/spring-shiro.xml"/>
+	<!--  <import resource="classpath:spring/application-activiti.xml"/> -->
 	<!-- <import resource="classpath:spring/quartz-bean.xml" /> -->
 	
 	

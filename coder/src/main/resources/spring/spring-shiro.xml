@@ -42,10 +42,11 @@
 	    </property> -->
 	    <property name="filterChainDefinitions">
 	        <value>
-	        	/shiro/** = anon
+	        	 /shiro/** = authc 
 	            /admin/** = authc, roles[admin]
 	            /docs/** = authc, perms[document:read]
-	            /** = authc
+	            <!-- /** = authc -->
+	            /** = anon
 	        </value>
 	    </property>
 	</bean>	

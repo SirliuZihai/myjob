@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
-import com.zihai.entity.User;
+import com.zihai.entity.PageEntity;
 
 /**
  * 
@@ -42,6 +42,34 @@ public class JdbcTool<T> {
 		/*JdbcTool<Person> tool = new JdbcTool<Person>();
 		List<Person> list = tool.doSelect("select * from Person", Person.class);*/
 	}
+	public PageEntity<T> queryPage(String sql,int page,int rows,boolean hasoffset, Class<T> returnType) {
+		int start=(page-1)*rows;
+		 StringBuffer pagesql=new StringBuffer(sql.length()+20);
+		 StringBuffer totalsql=new StringBuffer(sql.length()+20);
+		 totalsql.append("select count(*)  from (");
+		 if(hasoffset){
+		    pagesql.append("select * from (select row_.*,rownum rownum_ from(");
+		 }
+		 else{
+		    pagesql.append("select * from( ");
+		 }
+		 pagesql.append(sql);
+		 totalsql.append(sql);
+		 if(hasoffset){
+		    pagesql.append(") row_ where rownum<="+(start+rows)+") t where rownum_>"+start+"");
+		 }
+		else{
+		 pagesql.append(") t  limit "+start+","+rows+"");
+		}
+		 totalsql.append(") t");
+		 System.out.println(totalsql.toString());
+		 System.out.println(pagesql.toString());
+		 Integer total =
+		 Integer.parseInt(dao.getJdbcTemplate().queryForList(totalsql.toString()
+	        		).get(0).get("COUNT(*)").toString());
+		 List<T> list=doSelect(pagesql.toString(), returnType);
+		 return new PageEntity(total,list);
+			} 
 	public static void main(String args[]){
 		JdbcTool<String> tool = new JdbcTool<String>();
 		List<String> list = dao.getJdbcTemplate().queryForList("select id from areas", String.class);

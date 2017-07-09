@@ -128,8 +128,25 @@
 	 <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
 		<property name="proxyTargetClass" value="true"/>
 	</bean>
-	
-	
 		<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 	
+		<!-- 多文件上传-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+	<property name="defaultEncoding">
+				<value>UTF-8</value>
+			</property>
+			<property name="maxUploadSize">
+				<value>32505856</value> <!--31*1024*1024-->
+			</property>
+			<property name="maxInMemorySize">
+				<value>10240</value>
+			</property>
+	</bean>
+<!-- <bean id="conversionSerivce"  class="org.springframework.context.support.ConversionServiceFactoryBean">
+	<property name="converters">
+		<list>
+			<bean class="com.zihai.common.StringConverter"/>
+		</list>
+	</property>
+</bean> -->
 </beans>

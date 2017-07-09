@@ -1,13 +1,21 @@
 package classTest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Test {
 
 	public static void main(String[] args) {
-		String s = "liu";
+		/*String s = "liu";
 		int i = 1;
 		int[] arr ={1,2};
 		doing(s);
-		System.out.println(s);
+		System.out.println(s);*/
+		Map map = new HashMap<String,String>();
+		map.put("1", "liu");
+		map.put(null,"zhi");
+		System.out.println(map.get("1"));
+		System.out.println(map.get(null));
 	}
 	public static void doing(String s){
 		s.toCharArray()[0] = 'y';

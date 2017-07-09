@@ -3,6 +3,8 @@ package com.zihai.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class User implements Serializable{
  
 	private static final long serialVersionUID = 1L;
@@ -24,6 +26,7 @@ public class User implements Serializable{
     private Date makedatetime;
 
     private Date modifydatetime;
+    
     
     /**
      * 关联查询 Account
