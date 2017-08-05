@@ -59,6 +59,9 @@ public class CustomProcessDiagramGenerator {
     private static Stroke THICK_BORDER_STROKE = new BasicStroke(3.0f);
     private int minX;
     private int minY;
+    BpmnModel bpmnModel;
+    ProcessDefinitionEntity definition;
+    List<HistoricActivityInstance> activityInstances = new ArrayList<HistoricActivityInstance>();
 
     public CustomProcessDiagramGenerator() {
         init();
@@ -92,18 +95,21 @@ public class CustomProcessDiagramGenerator {
         subProcessType.add(BpmnXMLConstants.ELEMENT_CALL_ACTIVITY);
     }
 
-    public InputStream generateDiagram(String processInstanceId)
+    /**
+     * 根据任务id获得轨迹图
+     * */
+    public InputStream generateDiagram(String processInstanceId,String...executionIds)
             throws IOException {
-        HistoricProcessInstance historicProcessInstance = Context
-                .getCommandContext().getHistoricProcessInstanceEntityManager()
-                .findHistoricProcessInstance(processInstanceId);
-        String processDefinitionId = historicProcessInstance
-                .getProcessDefinitionId();
-        GetBpmnModelCmd getBpmnModelCmd = new GetBpmnModelCmd(
-                processDefinitionId);
-        BpmnModel bpmnModel = getBpmnModelCmd.execute(Context
-                .getCommandContext());
-        Point point = getMinXAndMinY(bpmnModel);
+    	 HistoricProcessInstance historicProcessInstance = Context
+                 .getCommandContext().getHistoricProcessInstanceEntityManager()
+                 .findHistoricProcessInstance(processInstanceId);
+         String processDefinitionId = historicProcessInstance
+                 .getProcessDefinitionId();
+         GetBpmnModelCmd getBpmnModelCmd = new GetBpmnModelCmd(
+                 processDefinitionId);
+         bpmnModel = getBpmnModelCmd.execute(Context
+                 .getCommandContext());
+         Point point = getMinXAndMinY(bpmnModel);
 		/*
 		 * this.minX = point.x; this.minY = point.y; this.minX = (this.minX <=
 		 * 5) ? 5 : this.minX; this.minY = (this.minY <= 5) ? 5 : this.minY;
@@ -125,7 +131,7 @@ public class CustomProcessDiagramGenerator {
 		if (this.minY > 0) {
 			this.minY = 0;
 }
-        ProcessDefinitionEntity definition = new GetDeploymentProcessDefinitionCmd(
+        definition = new GetDeploymentProcessDefinitionCmd(
                 processDefinitionId).execute(Context.getCommandContext());
         String diagramResourceName = definition.getDiagramResourceName();
         String deploymentId = definition.getDeploymentId();
@@ -138,15 +144,23 @@ public class CustomProcessDiagramGenerator {
         BufferedImage image = ImageIO.read(originDiagram);
 
         HistoricActivityInstanceQueryImpl historicActivityInstanceQueryImpl = new HistoricActivityInstanceQueryImpl();
-        historicActivityInstanceQueryImpl.processInstanceId(processInstanceId)
-                .orderByHistoricActivityInstanceStartTime().asc();
-
         Page page = new Page(0, 100);
-        List<HistoricActivityInstance> activityInstances = Context
-                .getCommandContext()
-                .getHistoricActivityInstanceEntityManager()
-                .findHistoricActivityInstancesByQueryCriteria(
-                        historicActivityInstanceQueryImpl, page);
+        if(executionIds.length==0){
+            historicActivityInstanceQueryImpl.processInstanceId(processInstanceId);        
+           activityInstances = Context .getCommandContext().getHistoricActivityInstanceEntityManager()
+                    .findHistoricActivityInstancesByQueryCriteria( historicActivityInstanceQueryImpl, page);
+        }else{
+        	 for(int i=0;i<executionIds.length;i++){
+        		 historicActivityInstanceQueryImpl.processInstanceId(processInstanceId).executionId(executionIds[i]);
+        		 List<HistoricActivityInstance> act = Context .getCommandContext().getHistoricActivityInstanceEntityManager()
+                         .findHistoricActivityInstancesByQueryCriteria( historicActivityInstanceQueryImpl, page);
+                activityInstances.addAll(act);
+        	 }
+
+        }
+                      
+
+  
 
         this.drawHistoryFlow(image, processInstanceId);
 
@@ -175,7 +189,7 @@ public class CustomProcessDiagramGenerator {
                     }
 
                     // 节点已经结束
-                    if ("跳过".equals(deleteReason)) {
+                    if ("completed".equals(deleteReason)) {
                         signSkipNode(image, activity.getX(),
                                 activity.getY(),
                                 activity.getWidth(), activity.getHeight(),
@@ -196,7 +210,6 @@ public class CustomProcessDiagramGenerator {
 
         return new ByteArrayInputStream(out.toByteArray());
     }
-
     private static String getDiagramExtension(String diagramResourceName) {
         return FilenameUtils.getExtension(diagramResourceName);
     }
@@ -261,7 +274,7 @@ public class CustomProcessDiagramGenerator {
 
     private static void signSkipNode(BufferedImage image, int x, int y,
             int width, int height, String activityType) {
-        Color nodeColor = SKIP_COLOR;
+        Color nodeColor = HISTORY_COLOR;
         Graphics2D graphics = image.createGraphics();
 
         try {
@@ -549,26 +562,15 @@ public class CustomProcessDiagramGenerator {
     }
 
     public void drawHistoryFlow(BufferedImage image, String processInstanceId) {
-        HistoricProcessInstance historicProcessInstance = Context
-                .getCommandContext().getHistoricProcessInstanceEntityManager()
-                .findHistoricProcessInstance(processInstanceId);
-        String processDefinitionId = historicProcessInstance
-                .getProcessDefinitionId();
-        Graph graph = new ActivitiHistoryGraphBuilder(processInstanceId)
+        Graph graph = new ActivitiHistoryGraphBuilder(definition, activityInstances)
                 .build();
 
         for (Edge edge : graph.getEdges()) {
-            drawSequenceFlow(image, processDefinitionId, edge.getName());
+            drawSequenceFlow(image, edge.getName());
         }
     }
 
-    public void drawSequenceFlow(BufferedImage image,
-            String processDefinitionId, String sequenceFlowId) {
-        GetBpmnModelCmd getBpmnModelCmd = new GetBpmnModelCmd(
-                processDefinitionId);
-        BpmnModel bpmnModel = getBpmnModelCmd.execute(Context
-                .getCommandContext());
-
+    public void drawSequenceFlow(BufferedImage image, String sequenceFlowId) {
         Graphics2D graphics = image.createGraphics();
         graphics.setPaint(HISTORY_COLOR);
         graphics.setStroke(new BasicStroke(2f));

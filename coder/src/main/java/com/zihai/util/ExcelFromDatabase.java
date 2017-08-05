@@ -1,17 +1,24 @@
 package com.zihai.util;
 
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
+import org.apache.poi.hssf.record.MergeCellsRecord;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -76,11 +83,46 @@ public class ExcelFromDatabase {
 	    fileOut.close();	
 	    wb.close();
 	}
-	
+	/**
+	 * 一对多的表导出的情况进行合并
+	 * */
+	public  void MergeCellForMainTable(Workbook workbook,Integer keycolumnNum,Integer beginColumn,Integer endColumn){
+		Sheet sheet = workbook.getSheetAt(0);
+		List<CellRangeAddress> merge_regionlist = new ArrayList<CellRangeAddress>();
+		CellRangeAddress region = null; //上一次合并的region
+		for(int j=beginColumn;j<=endColumn;j++ ){
+			for(int i=1;i<=sheet.getLastRowNum();i++){
+				Row row = sheet.getRow(i);
+				Row lastrow = sheet.getRow(i-1);
+				String rowkey = row.getCell(keycolumnNum).getStringCellValue();
+				String lastrowkey = lastrow.getCell(keycolumnNum).getStringCellValue();
+				if(i>1){
+					Row lastbutoneRaw = sheet.getRow(i-2);
+					String lastbutonerowkey = lastbutoneRaw.getCell(keycolumnNum).getStringCellValue();
+					if(lastbutonerowkey.equals(rowkey)){
+						region = merge_regionlist.get(merge_regionlist.size()-1);
+						region.setLastRow(region.getLastRow()+1);
+						continue;
+					}
+				}
+				if(rowkey.equals(lastrowkey)){
+					 region = new CellRangeAddress(i-1, i, j, j);
+					 merge_regionlist.add(region);
+				}
+					
+			}
+		}
+		for(CellRangeAddress region1:merge_regionlist){
+			sheet.addMergedRegion(region1);
+		}	
+	}
 	public static void main(String[] args) throws IOException, PropertyVetoException {
-		String sql = "select itme1  项目1,item2  项目2,itme3  项目3 from test";
-		new ExcelFromDatabase().WriteExcel("C:\\test.xlsx", sql);
-
+		//String sql = "select itme1  项目1,item2  项目2,itme3  项目3 from test";
+		//new ExcelFromDatabase().WriteExcel("C:\\test.xlsx", sql);
+		Workbook wb = new XSSFWorkbook(new FileInputStream(new File("C:\\test.xlsx")));
+		new ExcelFromDatabase().MergeCellForMainTable(wb,2,0,2);
+		FileOutputStream fileOut = new FileOutputStream("C:\\test2.xlsx");
+		wb.write(fileOut);
 	}
 
 }

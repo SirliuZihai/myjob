@@ -7,9 +7,12 @@ import org.activiti.engine.impl.interceptor.CommandContext;
 
 public class HistoryProcessInstanceDiagramCmd implements Command<InputStream> {
     protected String historyProcessInstanceId;
+    
+    protected String[] executionids;
 
-    public HistoryProcessInstanceDiagramCmd(String historyProcessInstanceId) {
-        this.historyProcessInstanceId = historyProcessInstanceId;
+    public HistoryProcessInstanceDiagramCmd(String proccessid,String... executionids) {
+        this.historyProcessInstanceId = proccessid;
+        this.executionids = executionids;
     }
 
     public InputStream execute(CommandContext commandContext) {
@@ -17,7 +20,7 @@ public class HistoryProcessInstanceDiagramCmd implements Command<InputStream> {
             CustomProcessDiagramGenerator customProcessDiagramGenerator = new CustomProcessDiagramGenerator();
 
             return customProcessDiagramGenerator
-                    .generateDiagram(historyProcessInstanceId);
+                    .generateDiagram(historyProcessInstanceId,executionids);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

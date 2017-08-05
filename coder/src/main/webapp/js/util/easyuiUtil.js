@@ -164,6 +164,7 @@ $.fn.datebox.defaults.formatter = function(date){
 	   	});
 	}
  function formate_date_2(value){
+	 if(value == null)return null;
 	 	var date = new Date(value);
 	 	var y = date.getFullYear();
 	 	var m = date.getMonth()+1;
@@ -309,4 +310,27 @@ function submit(id,url){
 }
 function dosuccess(){
 		$(document).scrollTop(0);	
+}
+/**
+ * 本地分页datagrid
+ * data:数据array
+ * dg_id 目标ID
+ * */
+function datagrid_local(data,dg_id){
+	var pager = $('#'+dg_id).datagrid("getPager"); 
+	var start_1 = (pager.pagination('options').pageNumber - 1) * pager.pagination('options').pageSize; 
+    var end_1 = start + pager.pagination('options').pageSize; 
+	$('#'+dg_id).datagrid('loadData',data.slice(start_1,end_1));
+	pager.pagination({ 
+	        total:send_data.length, 
+	        onSelectPage:function (pageNo, pageSize) {
+	          var start = (pageNo - 1) * pageSize; 
+	          var end = start + pageSize; 
+	          $('#'+dg_id).datagrid("loadData",data.slice(start, end)); 
+	            pager.pagination('refresh', { 
+	            total:data.length, 
+	            pageNumber:pageNo 
+	          }); 
+	        } 
+	      });
 }

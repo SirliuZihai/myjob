@@ -103,8 +103,7 @@ public class HellowWorld  {
 	@RequestMapping("/getForm.do")
 	@ResponseBody
 	public Result getForm(UserModel users,MultipartFile[] files){
-		System.out.println(users.getOneleveltest());
-		if(users.getUsers() == null) return new Result(true,"无任何数据");
+		if(users.getUsers() == null) return Result.success("无任何数据");
 		for(User u :users.getUsers()){
 			System.out.println(u.getUsername()+" "+u.getMakedatetime());
 			if(!ObjectUtils.isEmpty(u.getAccount()))System.out.println(u.getAccount().getCredit());
@@ -114,7 +113,7 @@ public class HellowWorld  {
 				System.out.println("thi "+i+"个"+files[i].getOriginalFilename());
 
 		}
-		return new Result(true," ok !");
+		return Result.success("OK");
 	}
 	@RequestMapping("/inform.do")
 	@ResponseBody
@@ -134,7 +133,7 @@ public class HellowWorld  {
 		list.add(u2);
 		UserModel m = new UserModel();
 		m.setUsers(list);
-		m.setOneleveltest("good");
+		m.setFilename("good.txt");
 		return m;
 	}
 	@RequestMapping("/inform2.do")

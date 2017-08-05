@@ -11,13 +11,16 @@
 </head>
 <body>
 	<input id="test" class="easyui-datebox"/>
-	<input id="test2" class="easyui-combobox" data-options="valueField: 'VALUE',textField: 'LABEL',data:statu_arr4"/>
+	<input id="test2" class="easyui-combobox"  data-options="value:'0',valueField: 'VALUE',textField: 'LABEL',data:statu_arr4"/>
 	<input id="test_text" class="easyui-textbox"/>
 	<button onclick="dis();">dis</button>
 	<button onclick="ena();">ena</button>
 	<button onclick="req();">req</button>
 	<button onclick="disreq();">disreq</button>
 	<button onclick="alertsomething();">alertsomething</button>
+	
+	<a href="javascript:void(0)" id="help_riskpossible" class="easyui-linkbutton" iconCls="icon-help" plain="true" onclick="dialogtip('possible.html',860);"></a>
+	<div id="help" class="easyui-dialog" closed="true" style="height:auto;top: 60px;" data-options="title:'帮助',resizable:true,shadow:false"></div>
 	
 <script type="text/javascript">
 var statu_arr4 = [{'LABEL': '是','VALUE': '1'},{'LABEL': '否','VALUE': '0'}];
@@ -29,9 +32,17 @@ $(function(){
 		}
 	}); 
 });
+$.parser.onComplete = function(){
+	alert('parse');
+};
 function dis(){
 //	easyui_disabled($('#test_text'),true,'textbox');
-	$('#test2').combobox({disabled:true});
+	//$('#test2').combobox({disabled:true});
+	$('#test2').combobox({
+		onChange:function(select){
+			alert(0);
+		}
+	})
 }
 function ena(){
 	//easyui_disabled($('#test_text'),false,'textbox');
@@ -61,6 +72,11 @@ $.fn.datebox.defaults.formatter = function(date){
  	   return new Date();  
  	  }  
  }
+ function dialogtip(url,width){
+		$('#help').dialog({width:width,href:url});
+		$('#help').dialog('hcenter');
+		$('#help').dialog('open');
+	}
 /* 			var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 var d2 = new Date(now.getFullYear(), now.getMonth(), now.getDate()+10); */
 </script>

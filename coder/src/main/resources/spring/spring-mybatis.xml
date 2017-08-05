@@ -32,23 +32,7 @@
 		<property name="breakAfterAcquireFailure" value="true" />
 		<property name="testConnectionOnCheckout" value="false" />
 	</bean>
-	<bean id="dataSource2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="driverClass" value="${db.driver}" />
-		<property name="jdbcUrl" value="${db.url.activity}" />
-		<property name="user" value="${db.username}" />
-		<property name="password" value="${db.password}" />
-		<property name="minPoolSize" value="1" />
-		<property name="maxPoolSize" value="3" />
-		<property name="maxIdleTime" value="1800" />
-		<property name="acquireIncrement" value="2" />
-		<property name="maxStatements" value="0" />
-		<property name="initialPoolSize" value="2" />
-		<property name="idleConnectionTestPeriod" value="1800" />
-		<property name="acquireRetryAttempts" value="30" />
-		<property name="breakAfterAcquireFailure" value="true" />
-		<property name="testConnectionOnCheckout" value="false" />
-	</bean>
+	
 	
 	<!-- myBatis文件 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

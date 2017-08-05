@@ -11,14 +11,30 @@ public class Result implements Serializable {
 	private String message;
 	private Object data;
 	
-	public Result(boolean success,String message){
-		this.success = success;
-		this.message = message;
+	public static Result success(String message){
+		Result result = new Result();
+		result.success = true;
+		result.message = message;
+		return result;
 	};
-	public Result(boolean success,String message,Object data){
-		this.success = success;
-		this.message = message;
-		this.data = data;
+	public static Result success(String message,Object data){
+		Result result = new Result();
+		result.success = true;
+		result.message = message;
+		return result;
+	};
+	public static Result failure(String message){
+		Result result = new Result();
+		result.success = false;
+		result.message = message;
+		return result;
+	};
+	public static Result failure(String message,Object data){
+		Result result = new Result();
+		result.success = false;
+		result.message = message;
+		result.data = data;
+		return result;
 	};
 	public boolean isSuccess() {
 		return success;

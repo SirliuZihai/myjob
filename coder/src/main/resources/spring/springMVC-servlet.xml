@@ -20,7 +20,9 @@
  			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
  	</context:component-scan> 
- 	
+ 	<context:component-scan  base-package="org.activiti">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 	  <!-- <bean class="org.springframework.http.converter.ResourceHttpMessageConverter" /> 
 	  <bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >  
 	       <property name="supportedMediaTypes">  

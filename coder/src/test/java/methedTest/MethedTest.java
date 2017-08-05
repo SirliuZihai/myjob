@@ -27,8 +27,7 @@ public class MethedTest {
 		return "得到返回值后的值";
 	}
 	public static void main(String[] args) {
-		if("a" == "a")
-			System.out.println("OK");
+		print(22);
 	}
 
 }

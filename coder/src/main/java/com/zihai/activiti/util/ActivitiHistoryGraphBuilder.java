@@ -7,34 +7,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.impl.HistoricActivityInstanceQueryImpl;
-import org.activiti.engine.impl.Page;
-import org.activiti.engine.impl.cmd.GetDeploymentProcessDefinitionCmd;
-import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ActivitiHistoryGraphBuilder {
     private static Logger logger = LoggerFactory
             .getLogger(ActivitiHistoryGraphBuilder.class);
-    private String processInstanceId;
     private ProcessDefinitionEntity processDefinitionEntity;
     private List<HistoricActivityInstance> historicActivityInstances;
     private List<HistoricActivityInstance> visitedHistoricActivityInstances = new ArrayList<HistoricActivityInstance>();
     private Map<String, Node> nodeMap = new HashMap<String, Node>();
 
-    public ActivitiHistoryGraphBuilder(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
+    public ActivitiHistoryGraphBuilder(ProcessDefinitionEntity processDefinitionEntity,List<HistoricActivityInstance> historicActivityInstances) {
+    	this.processDefinitionEntity = processDefinitionEntity;
+    	this.historicActivityInstances = historicActivityInstances;
     }
 
     public Graph build() {
-        this.fetchProcessDefinitionEntity();
-        this.fetchHistoricActivityInstances();
 
         Graph graph = new Graph();
 
@@ -52,12 +45,7 @@ public class ActivitiHistoryGraphBuilder {
                     historicActivityInstance.getStartTime().getTime());
 
             if (previousEdge == null) {
-                if (graph.getInitial() != null) {
-                   // throw new IllegalStateException("already set an initial.");
-                	 graph.setInitial(currentNode);
-                }
-
-                graph.setInitial(currentNode);
+            	 graph.addInitial(currentNode);
             } else {
                 logger.debug("previousEdge : {}", previousEdge.getName());
             }
@@ -73,32 +61,6 @@ public class ActivitiHistoryGraphBuilder {
         return graph;
     }
 
-    public void fetchProcessDefinitionEntity() {
-        String processDefinitionId = Context.getCommandContext()
-                .getHistoricProcessInstanceEntityManager()
-                .findHistoricProcessInstance(processInstanceId)
-                .getProcessDefinitionId();
-        GetDeploymentProcessDefinitionCmd cmd = new GetDeploymentProcessDefinitionCmd(
-                processDefinitionId);
-        processDefinitionEntity = cmd.execute(Context.getCommandContext());
-    }
-
-    public void fetchHistoricActivityInstances() {
-        HistoricActivityInstanceQueryImpl historicActivityInstanceQueryImpl = new HistoricActivityInstanceQueryImpl();
-        // historicActivityInstanceQueryImpl.processInstanceId(processInstanceId)
-        // .orderByHistoricActivityInstanceStartTime().asc();
-        // TODO: 如果用了uuid会造成这样排序出问题
-        // 但是如果用startTime，可能出现因为处理速度太快，时间一样，导致次序颠倒的问题
-        historicActivityInstanceQueryImpl.processInstanceId(processInstanceId)
-                .orderByHistoricActivityInstanceId().asc();
-
-        Page page = new Page(0, 100);
-        historicActivityInstances = Context
-                .getCommandContext()
-                .getHistoricActivityInstanceEntityManager()
-                .findHistoricActivityInstancesByQueryCriteria(
-                        historicActivityInstanceQueryImpl, page);
-    }
 
     public Edge findPreviousEdge(Node currentNode, long currentStartTime) {
         String activityId = currentNode.getName();

@@ -11,9 +11,7 @@
 		<property name="dataSource" ref="myDataSource" /> </bean> <tx:annotation-driven 
 		transaction-manager="transactionManager"/> -->
 	
-	<context:component-scan  base-package="org.activiti.conf,org.activiti.rest.editor,org.activiti.rest.service">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
+
 	<!-- 单例json对象 -->
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
 
@@ -22,9 +20,9 @@
 		class="org.activiti.engine.impl.persistence.StrongUuidGenerator" />
 		
 	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
-		<property name="dataSource" ref="myDataSource" />
-		<property name="transactionManager" ref="txManager" />
-		 <property name="databaseSchema" value="ACT" /> 
+		<property name="dataSource" ref="dataSource2" />
+		<property name="transactionManager" ref="transactionManager" />
+		<!--  <property name="databaseSchema" value="ACT" />  -->
 		<property name="databaseSchemaUpdate" value="true" />
 		<!-- 是否启动jobExecutor -->
 		<property name="jobExecutorActivate" value="false" />
@@ -38,6 +36,30 @@
 		<property name="mailServerPassword" value="123456"/>
 		<property name="mailServerUseSSL" value="false" />
 	</bean>
+	<bean id="dataSource2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${db.driver}" />
+		<property name="jdbcUrl" value="${db.url.activity}" />
+		<property name="user" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="minPoolSize" value="1" />
+		<property name="maxPoolSize" value="3" />
+		<property name="maxIdleTime" value="1800" />
+		<property name="acquireIncrement" value="2" />
+		<property name="maxStatements" value="0" />
+		<property name="initialPoolSize" value="2" />
+		<property name="idleConnectionTestPeriod" value="1800" />
+		<property name="acquireRetryAttempts" value="30" />
+		<property name="breakAfterAcquireFailure" value="true" />
+		<property name="testConnectionOnCheckout" value="false" />
+	</bean>
+	<!-- 配置事务管理器 -->
+	<!-- <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource" />
+	</bean> -->
+	<bean id="jdbcTemplate_act" class="org.springframework.jdbc.core.JdbcTemplate">
+	  	<property name="dataSource" ref="dataSource2" />
+     </bean>
 	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
 		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
 	</bean>
@@ -56,6 +78,8 @@
 		factory-method="getIdentityService" />
 	<bean id="formService" factory-bean="processEngine"
 		factory-method="getFormService" />
+	<bean id="lightmap" class="org.activiti.rest.diagram.services.ProcessInstanceHighlightsResource"></bean>	
+	
 	<!-- 集成REST服务需要的bean -->
 	<bean class="org.activiti.rest.service.api.RestResponseFactory"
 		id="restResponseFactory" />

@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Graph {
-    private Node initial;
-
-    public Node getInitial() {
-        return initial;
-    }
-
-    public void setInitial(Node initial) {
-        this.initial = initial;
+    private List<Node> initials = new ArrayList<Node>();
+    
+    public Node getInitial(){
+    	if(initials.size()>0){
+    		return initials.get(0);
+    	}
+    	return null;
     }
 
     public List<Node> getNodes() {
         List<Node> nodes = new ArrayList<Node>();
-        visitNode(initial, nodes);
-
+        for(Node initial:initials){
+        	 visitNode(initial, nodes);
+        }
         return nodes;
     }
 
@@ -32,8 +32,9 @@ public class Graph {
 
     public List<Edge> getEdges() {
         List<Edge> edges = new ArrayList<Edge>();
-        visitEdge(initial, edges);
-
+        for(Node initial:initials){
+        	 visitEdge(initial, edges);
+       }       
         return edges;
     }
 
@@ -55,4 +56,9 @@ public class Graph {
 
         return null;
     }
+
+	public void addInitial(Node currentNode) {
+		initials.add(currentNode);
+		
+	}
 }
